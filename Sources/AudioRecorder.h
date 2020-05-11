@@ -20,11 +20,10 @@ class AudioRecorder : public sf::SoundRecorder
         void pause ();
         void resume ();
 
-
-        void saveRecording (const QString&);
-        void cleanup ();
-
         bool isPaused ();
+
+
+        bool setOutputStream (const std::string&, const unsigned int&, const unsigned int&);
 
 
     private:
@@ -35,7 +34,7 @@ class AudioRecorder : public sf::SoundRecorder
 
         bool paused;
 
-        std::vector<short int>* recordingSamples;
+        sf::OutputSoundFile outputStream;
 };
 
 #endif // AUDIORECORDER_H

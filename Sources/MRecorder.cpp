@@ -1,5 +1,3 @@
-#include <thread>
-
 #include "MRecorder.h"
 
 
@@ -8,6 +6,7 @@
 
 MRecorder::MRecorder () : QTabWidget ()
 {
+    setWindowTitle (tr("MRecorder - Home"));
     setWindowIcon (QIcon ("Window Icon.png"));
 
 
@@ -50,7 +49,7 @@ void MRecorder::initOptions ()
     // Initialize default settings
 
     options.push_back ("en");
-    options.push_back (tr ("Vorbis (OGG) : compressed, good quality, low RAM usage").toStdString ());
+    options.push_back (tr ("Vorbis (OGG) : compressed, good quality").toStdString ());
     options.push_back ("44.1 kHz (CD)");
     options.push_back ("Language : English");
     options.push_back ("1");
@@ -139,9 +138,9 @@ void MRecorder::initOptionsBox ()
     chooseCodecLabel = new QLabel (tr("Choose audio codec :"));
     codecSelecter = new QComboBox;
 
-    codecSelecter->addItem (tr("Vorbis (OGG) : compressed, good quality, low RAM usage"), QVariant ("ogg"));
-    codecSelecter->addItem (tr("FLAC : compressed, best quality, medium RAM usage"), QVariant ("flac"));
-    codecSelecter->addItem (tr("PCM (WAV) : not compressed, best quality, high RAM usage"), QVariant ("wav"));
+    codecSelecter->addItem (tr("Vorbis (OGG) : compressed, good quality"), QVariant ("ogg"));
+    codecSelecter->addItem (tr("FLAC : compressed, best quality"), QVariant ("flac"));
+    codecSelecter->addItem (tr("PCM (WAV) : not compressed, best quality"), QVariant ("wav"));
 
     codecSelecter->setCurrentText (QString::fromStdString (options.at (1)));
 
@@ -187,24 +186,24 @@ void MRecorder::initRecordControlsBox ()
 
 
     bStart = new QPushButton (QIcon ("Start button.png"), tr("Start recording"));
-    bStop = new QPushButton (QIcon ("Stop button.png"), tr("Stop recording"));
     bPause = new QPushButton (QIcon ("Pause button.png"), tr("Pause recording"));
+    bStop = new QPushButton (QIcon ("Stop button.png"), tr("Stop recording"));
     bAbort = new QPushButton (QIcon ("Abort button.png"), tr("Stop without saving"));
 
     connect (bStart, SIGNAL (clicked ()), this, SLOT (start ()));
-    connect (bStop, SIGNAL (clicked ()), this, SLOT (stop ()));
     connect (bPause, SIGNAL (clicked ()), this, SLOT (pause ()));
+    connect (bStop, SIGNAL (clicked ()), this, SLOT (stop ()));
     connect (bAbort, SIGNAL (clicked ()), this, SLOT (abort ()));
 
 
     recordControlsLayout->addWidget (bStart);
-    recordControlsLayout->addWidget (bStop);
     recordControlsLayout->addWidget (bPause);
+    recordControlsLayout->addWidget (bStop);
     recordControlsLayout->addWidget (bAbort);
 
 
-    bStop->setEnabled (false);
     bPause->setEnabled (false);
+    bStop->setEnabled (false);
     bAbort->setEnabled (false);
 }
 
@@ -271,7 +270,7 @@ void MRecorder::resetCaptureSettings ()
     {
         deviceSelecter->setCurrentText (QString::fromStdString (sf::SoundRecorder::getAvailableDevices ().at (0)));
 
-        codecSelecter->setCurrentText (tr("Vorbis (OGG) : compressed, good quality, low RAM usage"));
+        codecSelecter->setCurrentText (tr("Vorbis (OGG) : compressed, good quality"));
 
         rateSelecter->setCurrentText ("44.1 kHz (CD)");
 
@@ -279,106 +278,122 @@ void MRecorder::resetCaptureSettings ()
     }
 }
 
-void MRecorder::reactivateUI ()
-{
-    setEnabled (true);
-    optionsBox->setEnabled (true);
-
-    bStart->setEnabled (true);
-    bStop->setEnabled (false);
-    bPause->setEnabled (false);
-    bAbort->setEnabled (false);
-}
-
 
 void MRecorder::start ()
 {
-    bStart->setText (tr("Start recording"));
-
-    bStart->setEnabled (false);
-    bStop->setEnabled (true);
-    bPause->setEnabled (true);
-    bAbort->setEnabled (true);
-
-    optionsBox->setEnabled (false);
-
-
     if (recorder->isPaused ())
+    {
         recorder->resume ();
 
+
+        bStart->setText (tr("Start recording"));
+        setWindowTitle (tr("MRecorder - Recording..."));
+
+        bStart->setEnabled (false);
+        bPause->setEnabled (true);
+    }
     else
     {
-        recorder->setDevice (deviceSelecter->currentText ().toStdString ());
-        recorder->setChannelCount (channelCountSelecter->currentData ().toUInt ());
+        setWindowTitle (tr("MRecorder - Start recording ?"));
 
-        recorder->start (rateSelecter->currentData ().toUInt ());
+
+        outputFileName = QFileDialog::getSaveFileName (this, tr("Choose output file"));
+
+        if (!outputFileName.isEmpty ())
+        {
+            recorder->setOutputStream ((outputFileName + "." + codecSelecter->currentData ().toString ()).toStdString (), rateSelecter->currentData ().toUInt (), channelCountSelecter->currentData ().toUInt ());
+
+            recorder->setDevice (deviceSelecter->currentText ().toStdString ());
+            recorder->setChannelCount (channelCountSelecter->currentData ().toUInt ());
+
+            recorder->start (rateSelecter->currentData ().toUInt ());
+
+
+            setWindowTitle (tr("MRecorder - Recording..."));
+
+            bStart->setEnabled (false);
+            bPause->setEnabled (true);
+            bStop->setEnabled (true);
+            bAbort->setEnabled (true);
+
+            optionsBox->setEnabled (false);
+        }
     }
 }
+
+void MRecorder::pause ()
+{
+    recorder->pause ();
+
+
+    bStart->setText (tr("Resume recording"));
+    setWindowTitle (tr("MRecorder - Paused"));
+
+    bStart->setEnabled (true);
+    bPause->setEnabled (false);
+}
+
 
 void MRecorder::stop ()
 {
     recorder->pause ();
 
+    setWindowTitle (tr("MRecorder - Stop now ?"));
 
-    QString fileName = QFileDialog::getSaveFileName (this, tr("Choose path to save your recording"));
 
-    if (!fileName.isEmpty ())
+    if (QMessageBox::question (this, tr("Confirmation"), tr("Do you really want to stop recording ?")) == QMessageBox::Yes)
     {
         recorder->stop ();
-        setEnabled (false);  // Saving may take a while, it's better to disable the window
+        recorder->setOutputStream ("", 0, 0);
 
-
-        saveThread = QThread::create (&MRecorder::save, this, fileName + "." + codecSelecter->currentData ().toString ());
-        saveThread->start ();
-
-        connect (saveThread, SIGNAL (finished ()), this, SLOT (reactivateUI ()));
 
         bStart->setText (tr("Start recording"));
+        setWindowTitle (tr("MRecorder - Home"));
+
+        optionsBox->setEnabled (true);
+
+        bStart->setEnabled (true);
+        bPause->setEnabled (false);
+        bStop->setEnabled (false);
+        bAbort->setEnabled (false);
     }
     else
+    {
         recorder->resume ();
-}
 
-
-void MRecorder::pause ()
-{
-    bStart->setText (tr("Resume recording"));
-
-    bPause->setEnabled (false);
-    bStart->setEnabled (true);
-
-
-    recorder->pause ();
+        setWindowTitle (tr("MRecorder - Recording..."));
+    }
 }
 
 void MRecorder::abort ()
 {
     recorder->pause ();
 
-    if (QMessageBox::question (this, tr("Careful !"), tr("Do you really want to abort recording ?")) == QMessageBox::Yes)
+    setWindowTitle (tr("MRecorder - Stop without saving ?"));
+
+
+    if (QMessageBox::question (this, tr("Beware !"), tr("Do you really want to abort recording ?")) == QMessageBox::Yes)
     {
         recorder->stop ();
-        recorder->cleanup ();
+        recorder->setOutputStream ("", 0, 0);
+
+        QFile::remove (outputFileName + "." + codecSelecter->currentData ().toString ());
+
 
         bStart->setText (tr("Start recording"));
+        setWindowTitle (tr("MRecorder - Home"));
 
         optionsBox->setEnabled (true);
 
         bStart->setEnabled (true);
-        bStop->setEnabled (false);
         bPause->setEnabled (false);
+        bStop->setEnabled (false);
         bAbort->setEnabled (false);
     }
     else
+    {
         recorder->resume ();
+
+        setWindowTitle (tr("MRecorder - Recording..."));
+    }
 }
-
-
-////////////////////////////////////////  Others
-
-
-void MRecorder::save (QString fileName)
-{
-    recorder->saveRecording (fileName);
-}
-

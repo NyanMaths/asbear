@@ -1,27 +1,23 @@
 #include "AudioRecorder.h"
 
 
-AudioRecorder::AudioRecorder () : sf::SoundRecorder ()
-{
-    recordingSamples = new std::vector<short int>;
-}
+AudioRecorder::AudioRecorder () : sf::SoundRecorder ()  { }
 
 AudioRecorder::~AudioRecorder ()  // Stop and clean recorder before removal
 {
     stop ();
+}
 
-    cleanup ();
-    delete recordingSamples;
+bool AudioRecorder::setOutputStream (const std::string& filename, const unsigned int& sampleRate, const unsigned int& channelCount)
+{
+    return outputStream.openFromFile (filename, sampleRate, channelCount);
 }
 
 
 bool AudioRecorder::onProcessSamples (const sf::Int16* samples, std::size_t samplesCount)  // Saves samples if not paused
 {
     if (!paused)
-    {
-        for (unsigned int i = 0 ; i != samplesCount ; i++)
-            recordingSamples->push_back (samples[i]);
-    }
+        outputStream.write (&samples[0], samplesCount);
 
     return true;
 }
@@ -35,27 +31,6 @@ bool AudioRecorder::onStart ()  // Called if the user want to start recording
 void AudioRecorder::onStop ()  // Called if the user want to stop recording
 {
     paused = false;
-}
-
-
-void AudioRecorder::saveRecording (const QString& fileName)
-{
-    // Save recording
-
-    sf::SoundBuffer recordingBuffer;
-    recordingBuffer.loadFromSamples (&recordingSamples->at (0), recordingSamples->size (), getChannelCount (), getSampleRate ());
-
-    recordingBuffer.saveToFile (fileName.toStdString ());
-
-
-    cleanup ();  // And clean !
-}
-
-void AudioRecorder::cleanup ()
-{
-    recordingSamples->clear ();
-    recordingSamples->shrink_to_fit ();
-    recordingSamples->resize (0);
 }
 
 

@@ -3,14 +3,11 @@
 
 
 #include <QApplication>
-#include <QObject>
 #include <QProcess>
-#include <QFileInfo>
 #include <QFontDatabase>
 #include <QTranslator>
-#include <QThread>
-
 #include <QScreen>
+
 #include <QTabWidget>
 #include <QPushButton>
 #include <QComboBox>
@@ -23,7 +20,6 @@
 
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QInputDialog>
 
 #include "AudioRecorder.h"
 
@@ -49,8 +45,6 @@ class MRecorder : public QTabWidget
         void refreshDevicesList ();
         void resetCaptureSettings ();
 
-        void reactivateUI ();
-
 
     private:
         void initOptions ();
@@ -62,17 +56,12 @@ class MRecorder : public QTabWidget
         void initOthers ();
 
 
-        void save (QString);
-
-
         QFont UIFont;
 
         std::vector<std::string> options;
 
         QTranslator* translator;
         QTranslator* messageBoxesTranslator;
-
-        QThread* saveThread;
 
 
         AudioRecorder* recorder;
@@ -111,6 +100,8 @@ class MRecorder : public QTabWidget
             QLabel* stopLabel;
             QLabel* pauseLabel;
             QLabel* abortLabel;
+
+          QString outputFileName;
 
 
         QWidget* othersTab;
