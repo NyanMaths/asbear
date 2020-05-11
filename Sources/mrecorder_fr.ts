@@ -30,13 +30,13 @@
         <location filename="MRecorder.cpp" line="142"/>
         <source>FLAC : compressed, best quality</source>
         <oldsource>Vorbis (OGG) : compressed, good quality, low RAM usage</oldsource>
-        <translation>Vorbis (OGG) : compressé, bonne qualité</translation>
+        <translation>FLAC : compressé, meilleure qualité</translation>
     </message>
     <message>
         <location filename="MRecorder.cpp" line="143"/>
         <source>PCM (WAV) : not compressed, best quality</source>
         <oldsource>FLAC : compressed, best quality, medium RAM usage</oldsource>
-        <translation>FLAC : compressé, meilleure qualité</translation>
+        <translation>PCM (WAV) : non-compressé, meilleure qualité</translation>
     </message>
     <message>
         <location filename="MRecorder.cpp" line="148"/>
