@@ -4,6 +4,7 @@
 
 #include <QApplication>
 #include <QProcess>
+#include <QCloseEvent>
 #include <QFontDatabase>
 #include <QTranslator>
 #include <QScreen>
@@ -41,7 +42,7 @@ class MRecorder : public QTabWidget
         void pause ();
         void abort ();
 
-        void languageChanged (int);
+        void languageChanged ();
         void refreshDevicesList ();
         void resetCaptureSettings ();
 
@@ -54,6 +55,9 @@ class MRecorder : public QTabWidget
           void initOptionsBox ();
 
         void initOthers ();
+
+
+        void closeEvent (QCloseEvent*);
 
 
         QFont UIFont;

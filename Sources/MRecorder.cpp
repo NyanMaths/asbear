@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "MRecorder.h"
 
 
@@ -6,10 +8,6 @@
 
 MRecorder::MRecorder () : QTabWidget ()
 {
-    setWindowTitle (tr("MRecorder - Home"));
-    setWindowIcon (QIcon ("Window Icon.png"));
-
-
     QFontDatabase::addApplicationFont ("Ubuntu.ttf");
     UIFont = QFont ("Ubuntu", 12);
 
@@ -26,6 +24,10 @@ MRecorder::MRecorder () : QTabWidget ()
     messageBoxesTranslator = new QTranslator;
     messageBoxesTranslator->load ("qtbase_" + QString::fromStdString (options.at (0)));
     qApp->installTranslator (messageBoxesTranslator);
+
+
+    setWindowTitle (tr("MRecorder - Home"));
+    setWindowIcon (QIcon ("Window Icon.png"));
 
 
     recorderTab = new QWidget;
@@ -68,6 +70,31 @@ void MRecorder::initOptions ()
 }
 
 
+void MRecorder::closeEvent (QCloseEvent* event)
+{
+    if (recorder->recording ())
+    {
+        QMessageBox::StandardButton answer = QMessageBox::question (this, tr("Wait a second !"), tr("It seems you are still recording,\nDo you want to save before close ?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+
+        if (answer == QMessageBox::Yes)
+        {
+            recorder->stop ();
+            event->accept ();
+        }
+        else if (answer == QMessageBox::No)
+        {
+            recorder->stop ();
+            recorder->setOutputStream ("", 0, 0);
+
+            QFile::remove (outputFileName + "." + codecSelecter->currentData ().toString ());
+
+            event->accept ();
+        }
+        else
+            event->ignore ();
+    }
+}
+
 MRecorder::~MRecorder ()
 {
     std::ofstream optionsStream ("Options.pastouche");
@@ -84,7 +111,7 @@ MRecorder::~MRecorder ()
 }
 
 
-/////////////////////////  Tabs
+/////////////////////////  Audio recorder tab
 
 
 void MRecorder::initRecorder ()
@@ -123,7 +150,9 @@ void MRecorder::initOptionsBox ()
 {
     optionsBox = new QGroupBox (tr("Options"));
     recorderTabLayout->addWidget (optionsBox);
+
     optionsBoxLayout = new QGridLayout (optionsBox);
+    optionsBoxLayout->setSpacing (15);
 
 
     chooseDeviceLabel = new QLabel (tr("Choose input device :"));
@@ -182,6 +211,7 @@ void MRecorder::initRecordControlsBox ()
 {
     recordControlsBox = new QWidget;
     recorderTabLayout->addWidget (recordControlsBox);
+
     recordControlsLayout = new QHBoxLayout (recordControlsBox);
 
 
@@ -208,17 +238,21 @@ void MRecorder::initRecordControlsBox ()
 }
 
 
+/////////////////////////  "About and settings" tab
+
+
 void MRecorder::initOthers ()
 {
     addTab (othersTab, tr("About and settings"));
     othersTabLayout = new QVBoxLayout (othersTab);
 
 
-    aboutLabel = new QLabel (tr("This opensource software was developed by NY4N_M4THS (MemeTech INC)<br/>"
-                                "under <a href = 'https://gnu.org/licenses/lgpl-3.0.en.html'>LGPL 3.1</a> with the framework <a href = 'https://qt.io'>Qt</a> and <a href = 'https://sfml-dev.org'>SFML</a> in C++ language.<br/>"
-                                "You can also visit <a href = 'https://memetech-inc.weebly.com'>our website</a> to check for updates,<br/>"
-                                "try other of our applications or ask for new features !<br/>"
-                                "Click <a href = 'https://github.com/NyanMaths/MRecorder'>here</a> to visit the GitHub page of the project.<br/><br/>"));
+    aboutLabel = new QLabel (tr(
+        "This opensource software was developed by NY4N_M4THS (MemeTech INC)<br/>"
+        "under <a href = 'https://gnu.org/licenses/lgpl-3.0.en.html'>LGPL 3.1</a> with the framework <a href = 'https://qt.io'>Qt</a> and <a href = 'https://sfml-dev.org'>SFML</a> in C++ language.<br/>"
+        "You can also visit <a href = 'https://memetech-inc.weebly.com'>our website</a> to check for updates,<br/>"
+        "try other of our applications or <a href = 'https://github.com/NyanMaths/MRecorder/issues'>ask for new features</a> !<br/>"
+        "Click <a href = 'https://github.com/NyanMaths/MRecorder'>here</a> to visit the GitHub page of the project.<br/><br/>"));
 
     aboutLabel->setOpenExternalLinks (true);
     aboutLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
@@ -231,7 +265,7 @@ void MRecorder::initOthers ()
 
     languageSelecter->setCurrentText (QString::fromStdString (options.at (3)));
 
-    connect (languageSelecter, SIGNAL (currentIndexChanged (int)), this, SLOT (languageChanged (int)));
+    connect (languageSelecter, SIGNAL (currentIndexChanged (int)), this, SLOT (languageChanged ()));
 
 
     othersTabLayout->addWidget (aboutLabel);
@@ -254,7 +288,7 @@ void MRecorder::refreshDevicesList ()
 }
 
 
-void MRecorder::languageChanged (int)
+void MRecorder::languageChanged ()
 {
     if (QMessageBox::question (this, tr("Language changed"), tr("You need to reload the application to apply changes.\nDo you want to restart now ?")) == QMessageBox::Yes)
     {
@@ -279,9 +313,12 @@ void MRecorder::resetCaptureSettings ()
 }
 
 
+////////////////////////////////////////  Recording controls
+
+
 void MRecorder::start ()
 {
-    if (recorder->isPaused ())
+    if (recorder->paused ())
     {
         recorder->resume ();
 
@@ -320,6 +357,7 @@ void MRecorder::start ()
         }
     }
 }
+
 
 void MRecorder::pause ()
 {
@@ -364,6 +402,7 @@ void MRecorder::stop ()
         setWindowTitle (tr("MRecorder - Recording..."));
     }
 }
+
 
 void MRecorder::abort ()
 {

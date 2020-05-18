@@ -1,12 +1,8 @@
 #ifndef AUDIORECORDER_H
 #define AUDIORECORDER_H
 
+
 #include <SFML/Audio.hpp>
-
-#include <QString>
-
-#include <vector>
-#include <fstream>
 
 
 class AudioRecorder : public sf::SoundRecorder
@@ -20,7 +16,8 @@ class AudioRecorder : public sf::SoundRecorder
         void pause ();
         void resume ();
 
-        bool isPaused ();
+        bool paused ();
+        bool recording ();
 
 
         bool setOutputStream (const std::string&, const unsigned int&, const unsigned int&);
@@ -32,7 +29,8 @@ class AudioRecorder : public sf::SoundRecorder
         virtual bool onStart ();
 
 
-        bool paused;
+        bool _paused;
+        bool _recording;
 
         sf::OutputSoundFile outputStream;
 };
