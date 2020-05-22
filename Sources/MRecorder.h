@@ -3,11 +3,6 @@
 
 
 #include <QApplication>
-#include <QProcess>
-#include <QCloseEvent>
-#include <QFontDatabase>
-#include <QTranslator>
-#include <QScreen>
 
 #include <QTabWidget>
 #include <QPushButton>
@@ -23,6 +18,7 @@
 #include <QFileDialog>
 
 #include "AudioRecorder.h"
+#include "DevicesComboBox.h"
 
 
 class MRecorder : public QTabWidget
@@ -43,12 +39,14 @@ class MRecorder : public QTabWidget
         void abort ();
 
         void languageChanged ();
-        void refreshDevicesList ();
         void resetCaptureSettings ();
+
+        void initPalette ();
 
 
     private:
-        void initOptions ();
+        void readOptions ();
+        void loadOptions ();
 
         void initRecorder ();
           void initRecordControlsBox ();
@@ -60,9 +58,8 @@ class MRecorder : public QTabWidget
         void closeEvent (QCloseEvent*);
 
 
-        QFont UIFont;
-
         std::vector<std::string> options;
+        QPalette lightPalette;
 
         QTranslator* translator;
         QTranslator* messageBoxesTranslator;
@@ -77,7 +74,7 @@ class MRecorder : public QTabWidget
 
             QLabel* chooseDeviceLabel;
             QComboBox* deviceSelecter;
-            QPushButton* bRefreshDevices;
+            QTimer* devicesTimer;
 
             QLabel* chooseCodecLabel;
             QComboBox* codecSelecter;
@@ -109,10 +106,15 @@ class MRecorder : public QTabWidget
 
 
         QWidget* othersTab;
-        QVBoxLayout* othersTabLayout;
-
+        QGridLayout* othersTabLayout;
           QLabel* aboutLabel;
-          QComboBox* languageSelecter;
+
+          QGroupBox* UIOptionsBox;
+          QGridLayout* UIOptionsBoxLayout;
+            QLabel* chooseLanguageLabel;
+            QComboBox* languageSelecter;
+            QLabel* chooseThemeLabel;
+            QComboBox* themeSelecter;
 };
 
 
