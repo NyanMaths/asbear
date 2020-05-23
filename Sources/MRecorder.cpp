@@ -563,6 +563,7 @@ void MRecorder::clearRecordingsList ()
         recordingsList->clear ();
 
         bPlayRecording->setEnabled (false);
+        bRemoveFromList->setEnabled (false);
         bClearRecordingsList->setEnabled (false);
         bDeleteRecording->setEnabled (false);
         bRemoveAllRecordings->setEnabled (false);
@@ -579,6 +580,7 @@ void MRecorder::deleteAllRecordings ()
         recordingsList->clear ();
 
         bPlayRecording->setEnabled (false);
+        bRemoveFromList->setEnabled (false);
         bClearRecordingsList->setEnabled (false);
         bDeleteRecording->setEnabled (false);
         bRemoveAllRecordings->setEnabled (false);
