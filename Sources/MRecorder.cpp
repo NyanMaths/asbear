@@ -1,5 +1,6 @@
 #include <QProcess>
 #include <QCloseEvent>
+#include <QFile>
 
 #include <QFontDatabase>
 #include <QStyleFactory>
@@ -7,6 +8,7 @@
 #include <QScreen>
 
 #include <fstream>
+#include <windows.h>
 
 #include "MRecorder.h"
 
@@ -17,6 +19,7 @@
 MRecorder::MRecorder () : QTabWidget ()
 {
     QFontDatabase::addApplicationFont ("Ubuntu.ttf");
+    initPalettes ();
 
 
     readOptions ();  // Read options file
@@ -30,8 +33,9 @@ MRecorder::MRecorder () : QTabWidget ()
     qApp->installTranslator (messageBoxesTranslator);
 
 
-    initRecorder (); // Initialize Recorder tab
-    initOthers ();   // Initialize About and Settings tab
+    initRecorder ();     // Initialize "Audio Recorder" tab
+    initRecordingsTab ();// Initialize "Recordings" tab
+    initOthers ();       // Initialize "About and Settings" tab
 
     loadOptions ();  // Load user's settings
 
@@ -40,7 +44,7 @@ MRecorder::MRecorder () : QTabWidget ()
     setWindowIcon (QIcon ("Window Icon.png"));
 
 
-    initPalette ();
+    initUIPalette ();
 
 
     show ();
@@ -52,7 +56,37 @@ MRecorder::MRecorder () : QTabWidget ()
 }
 
 
-void MRecorder::initPalette ()
+void MRecorder::initPalettes ()
+{
+    lightPalette = qApp->palette ();
+
+
+    QColor darkColor = QColor (45, 45, 45);
+    QColor disabledColor = QColor (127, 127, 127);
+
+    darkPalette.setColor (QPalette::Window, darkColor);
+    darkPalette.setColor (QPalette::WindowText, Qt::white);
+    darkPalette.setColor (QPalette::Base, QColor (18, 18, 18));
+    darkPalette.setColor (QPalette::AlternateBase, darkColor);
+    darkPalette.setColor (QPalette::ToolTipBase, Qt::white);
+    darkPalette.setColor (QPalette::ToolTipText, Qt::white);
+    darkPalette.setColor (QPalette::Text, Qt::white);
+    darkPalette.setColor (QPalette::Disabled, QPalette::Text, disabledColor);
+    darkPalette.setColor (QPalette::Button, darkColor);
+    darkPalette.setColor (QPalette::ButtonText, Qt::white);
+    darkPalette.setColor (QPalette::Disabled, QPalette::ButtonText, disabledColor);
+    darkPalette.setColor (QPalette::BrightText, Qt::red);
+    darkPalette.setColor (QPalette::Link, QColor (42, 130, 218));
+
+    darkPalette.setColor (QPalette::Highlight, QColor (42, 130, 218));
+    darkPalette.setColor (QPalette::HighlightedText, Qt::black);
+    darkPalette.setColor (QPalette::Disabled, QPalette::HighlightedText, disabledColor);
+
+    darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
+    darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+}
+
+void MRecorder::initUIPalette ()
 {
     options[5] = themeSelecter->currentText ().toStdString ();
 
@@ -69,34 +103,9 @@ void MRecorder::initPalette ()
     else
     {
         qApp->setStyle (QStyleFactory::create ("Fusion"));
-
-        QPalette darkPalette;
-        QColor darkColor = QColor (45, 45, 45);
-        QColor disabledColor = QColor (127, 127, 127);
-
-        darkPalette.setColor (QPalette::Window, darkColor);
-        darkPalette.setColor (QPalette::WindowText, Qt::white);
-        darkPalette.setColor (QPalette::Base, QColor (18, 18, 18));
-        darkPalette.setColor (QPalette::AlternateBase, darkColor);
-        darkPalette.setColor (QPalette::ToolTipBase, Qt::white);
-        darkPalette.setColor (QPalette::ToolTipText, Qt::white);
-        darkPalette.setColor (QPalette::Text, Qt::white);
-        darkPalette.setColor (QPalette::Disabled, QPalette::Text, disabledColor);
-        darkPalette.setColor (QPalette::Button, darkColor);
-        darkPalette.setColor (QPalette::ButtonText, Qt::white);
-        darkPalette.setColor (QPalette::Disabled, QPalette::ButtonText, disabledColor);
-        darkPalette.setColor (QPalette::BrightText, Qt::red);
-        darkPalette.setColor (QPalette::Link, QColor (42, 130, 218));
-
-        darkPalette.setColor (QPalette::Highlight, QColor (42, 130, 218));
-        darkPalette.setColor (QPalette::HighlightedText, Qt::black);
-        darkPalette.setColor (QPalette::Disabled, QPalette::HighlightedText, disabledColor);
-
-        darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
-        darkPalette.setColor(QPalette::ToolTipText, Qt::white);
-
         qApp->setPalette (darkPalette);
     }
+
     qApp->setFont (QFont ("Ubuntu", 12));
 }
 
@@ -123,11 +132,9 @@ void MRecorder::readOptions ()
     {
         std::string settingValue;
 
-        for (unsigned short int i = 0 ; i != 6 && getline (optionsStream, settingValue) ; i++)
+        for (unsigned short int i = 0 ; getline (optionsStream, settingValue) ; i++)
             options[i] = settingValue;
     }
-
-    lightPalette = qApp->palette ();
 }
 
 void MRecorder::loadOptions ()
@@ -141,7 +148,7 @@ void MRecorder::loadOptions ()
 
     connect (languageSelecter, SIGNAL (currentIndexChanged (int)), this, SLOT (languageChanged ()));
 
-    connect (themeSelecter, SIGNAL (currentIndexChanged (int)), this, SLOT (initPalette ()));
+    connect (themeSelecter, SIGNAL (currentIndexChanged (int)), this, SLOT (initUIPalette ()));
 }
 
 
@@ -158,6 +165,11 @@ MRecorder::~MRecorder ()
                      <<channelCountSelecter->currentIndex ()<<"\n"
                      <<themeSelecter->currentText ().toStdString ();
     }
+
+    std::ofstream recordingsFile ("Recordings.pastouche");
+
+    for (int i = 0 ; i != recordingsList->count () ; i++)
+        recordingsFile<<recordingsList->item (i)->text ().toStdString ()<<"\n";
 }
 
 
@@ -190,7 +202,7 @@ void MRecorder::initRecorder ()
 
     optionsBoxLayout->addWidget (bResetCaptureSettings, 4, 0);
 
-    optionsBoxLayout->addWidget (nyanmathsImage, 1, 2, 3, 1);
+    optionsBoxLayout->addWidget (nyanmathsImage, 0, 2, 4, 1);
 
 
     initRecordControlsBox ();
@@ -315,7 +327,10 @@ void MRecorder::start ()
 
         if (!outputFileName.isEmpty ())
         {
-            recorder->setOutputStream ((outputFileName + "." + codecSelecter->currentData ().toString ()).toStdString (), rateSelecter->currentData ().toUInt (), channelCountSelecter->currentData ().toUInt ());
+            outputFileName += "." + codecSelecter->currentData ().toString ();
+
+
+            recorder->setOutputStream (outputFileName.toStdString (), rateSelecter->currentData ().toUInt (), channelCountSelecter->currentData ().toUInt ());
 
             recorder->setDevice (deviceSelecter->currentText ().toStdString ());
             recorder->setChannelCount (channelCountSelecter->currentData ().toUInt ());
@@ -358,6 +373,7 @@ void MRecorder::stop ()
     {
         recorder->stop ();
         recorder->setOutputStream ("", 0, 0);
+        recordingsList->addItem (outputFileName);
 
 
         bStart->setText (tr("Start &recording"));
@@ -369,6 +385,9 @@ void MRecorder::stop ()
         bPause->setEnabled (false);
         bStop->setEnabled (false);
         bAbort->setEnabled (false);
+
+        bClearRecordingsList->setEnabled (true);
+        bRemoveAllRecordings->setEnabled (true);
     }
     else
     {
@@ -390,7 +409,7 @@ void MRecorder::abort ()
         recorder->stop ();
         recorder->setOutputStream ("", 0, 0);
 
-        QFile::remove (outputFileName + "." + codecSelecter->currentData ().toString ());
+        QFile::remove (outputFileName);
 
 
         bStart->setText (tr("Start &recording"));
@@ -423,6 +442,8 @@ void MRecorder::closeEvent (QCloseEvent* event)
         if (answer == QMessageBox::Yes)
         {
             recorder->stop ();
+            recordingsList->addItem (outputFileName);
+
             event->accept ();
         }
         else if (answer == QMessageBox::No)
@@ -430,12 +451,151 @@ void MRecorder::closeEvent (QCloseEvent* event)
             recorder->stop ();
             recorder->setOutputStream ("", 0, 0);
 
-            QFile::remove (outputFileName + "." + codecSelecter->currentData ().toString ());
+            QFile::remove (outputFileName);
 
             event->accept ();
         }
         else
             event->ignore ();
+    }
+}
+
+
+////////////////////////////////////////  "Recordings" tab
+
+
+void MRecorder::initRecordingsTab ()
+{
+    recordingsTab = new QWidget;
+    addTab (recordingsTab, tr("Your recordings"));
+    recordingsTabLayout = new QGridLayout (recordingsTab);
+
+
+    bPlayRecording = new QPushButton (tr("&Play"));
+    bRemoveFromList = new QPushButton (tr("&Remove from list"));
+    bClearRecordingsList = new QPushButton (tr("&Clear list"));
+    bDeleteRecording = new QPushButton (tr("&Delete"));
+    bRemoveAllRecordings = new QPushButton (tr("Delete &all"));
+
+    recordingsList = new QListWidget;
+    recordingsList->setSortingEnabled (true);
+
+    std::ifstream recordingsFile ("Recordings.pastouche");
+    if (recordingsFile)
+    {
+        std::string recordingPath;
+
+        while (getline (recordingsFile, recordingPath))
+            if (QFile::exists (QString::fromStdString (recordingPath)))
+                recordingsList->addItem (QString::fromStdString (recordingPath));
+    }
+
+    bPlayRecording->setEnabled (false);
+    bDeleteRecording->setEnabled (false);
+    bRemoveFromList->setEnabled (false);
+
+    if (recordingsList->count () == 0)
+    {
+        bClearRecordingsList->setEnabled (false);
+        bRemoveAllRecordings->setEnabled (false);
+    }
+
+    connect (bPlayRecording, SIGNAL (clicked ()), this, SLOT (playRecording ()));
+    connect (bRemoveFromList, SIGNAL (clicked ()), this, SLOT (removeFromList ()));
+    connect (bClearRecordingsList, SIGNAL (clicked ()), this, SLOT (clearRecordingsList ()));
+    connect (bDeleteRecording, SIGNAL (clicked ()), this, SLOT (deleteRecording ()));
+    connect (bRemoveAllRecordings, SIGNAL (clicked ()), this, SLOT (deleteAllRecordings ()));
+
+    connect (recordingsList, SIGNAL (itemDoubleClicked (QListWidgetItem*)), this, SLOT (playRecording ()));
+    connect (recordingsList, SIGNAL (itemClicked (QListWidgetItem*)), this, SLOT (recordingClicked ()));
+
+
+    recordingsTabLayout->addWidget (bPlayRecording, 0, 0);
+    recordingsTabLayout->addWidget (bRemoveFromList, 0, 1);
+    recordingsTabLayout->addWidget (bClearRecordingsList, 0, 2);
+    recordingsTabLayout->addWidget (bDeleteRecording, 0, 3);
+    recordingsTabLayout->addWidget (bRemoveAllRecordings, 0, 4);
+    recordingsTabLayout->addWidget (recordingsList, 1, 0, 1, 5);
+}
+
+
+////////////// Slots
+
+
+void MRecorder::recordingClicked ()
+{
+    bPlayRecording->setEnabled (true);
+    bDeleteRecording->setEnabled (true);
+    bRemoveFromList->setEnabled (true);
+}
+
+void MRecorder::playRecording ()
+{
+    ShellExecuteA (nullptr, "open", recordingsList->currentItem ()->text ().replace ("/", "\\").toLocal8Bit (), "", "", SW_SHOWDEFAULT);
+}
+
+void MRecorder::deleteRecording ()
+{
+    QString fileName (recordingsList->currentItem ()->text ());
+
+    if (QMessageBox::question (this, tr("Confirmation"), tr("Do you really want to permanently delete\n") + fileName + " ?") == QMessageBox::Yes)
+    {
+        QFile::remove (fileName);
+
+
+        recordingsList->takeItem (recordingsList->currentRow ());
+
+        if (recordingsList->count () == 0)
+        {
+            bPlayRecording->setEnabled (false);
+            bRemoveFromList->setEnabled (false);
+            bClearRecordingsList->setEnabled (false);
+            bDeleteRecording->setEnabled (false);
+            bRemoveAllRecordings->setEnabled (false);
+        }
+    }
+}
+
+void MRecorder::clearRecordingsList ()
+{
+    if (QMessageBox::question (this, tr("Confirmation"), tr("Do you really want to clear the list ?\nThis won't remove your recordings.")) == QMessageBox::Yes)
+    {
+        recordingsList->clear ();
+
+        bPlayRecording->setEnabled (false);
+        bClearRecordingsList->setEnabled (false);
+        bDeleteRecording->setEnabled (false);
+        bRemoveAllRecordings->setEnabled (false);
+    }
+}
+
+void MRecorder::deleteAllRecordings ()
+{
+    if (QMessageBox::question (this, tr("Confirmation"), tr("Do you really want to remove all your recordings ?\nThis action cannot be undone.")) == QMessageBox::Yes)
+    {
+        for (int i = 0 ; i != recordingsList->count () ; i++)
+            QFile::remove (recordingsList->item (i)->text ());
+
+        recordingsList->clear ();
+
+        bPlayRecording->setEnabled (false);
+        bClearRecordingsList->setEnabled (false);
+        bDeleteRecording->setEnabled (false);
+        bRemoveAllRecordings->setEnabled (false);
+    }
+}
+
+void MRecorder::removeFromList ()
+{
+    recordingsList->takeItem (recordingsList->currentRow ());
+
+    if (recordingsList->count () == 0)
+    {
+        bPlayRecording->setEnabled (false);
+        bRemoveFromList->setEnabled (false);
+        bClearRecordingsList->setEnabled (false);
+        bDeleteRecording->setEnabled (false);
+        bRemoveAllRecordings->setEnabled (false);
     }
 }
 
@@ -480,9 +640,9 @@ void MRecorder::initOthers ()
     themeSelecter->addItem (tr("Fusion Light"));
     themeSelecter->addItem (tr("Fusion Dark"));
 
-    UIOptionsBoxLayout->addWidget (chooseLanguageLabel, 0, 0, Qt::AlignRight);
+    UIOptionsBoxLayout->addWidget (chooseLanguageLabel, 0, 0);
     UIOptionsBoxLayout->addWidget (languageSelecter, 0, 1);
-    UIOptionsBoxLayout->addWidget (chooseThemeLabel, 1, 0, Qt::AlignRight);
+    UIOptionsBoxLayout->addWidget (chooseThemeLabel, 1, 0);
     UIOptionsBoxLayout->addWidget (themeSelecter, 1, 1);
 
 

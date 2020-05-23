@@ -7,6 +7,7 @@
 #include <QTabWidget>
 #include <QPushButton>
 #include <QComboBox>
+#include <QListWidget>
 #include <QLabel>
 
 #include <QGroupBox>
@@ -41,16 +42,28 @@ class MRecorder : public QTabWidget
         void languageChanged ();
         void resetCaptureSettings ();
 
-        void initPalette ();
+        void initUIPalette ();
+
+        void deleteRecording ();
+        void deleteAllRecordings ();
+        void removeFromList ();
+        void clearRecordingsList ();
+        void playRecording ();
+
+        void recordingClicked ();
 
 
     private:
+        void initPalettes ();
+
         void readOptions ();
         void loadOptions ();
 
         void initRecorder ();
           void initRecordControlsBox ();
           void initOptionsBox ();
+
+        void initRecordingsTab ();
 
         void initOthers ();
 
@@ -60,9 +73,13 @@ class MRecorder : public QTabWidget
 
         std::vector<std::string> options;
         QPalette lightPalette;
+        QPalette darkPalette;
 
         QTranslator* translator;
         QTranslator* messageBoxesTranslator;
+
+
+   ///////////////  "Audio Recorder" tab  ///////////////
 
 
         AudioRecorder* recorder;
@@ -103,6 +120,22 @@ class MRecorder : public QTabWidget
             QLabel* abortLabel;
 
           QString outputFileName;
+
+
+   ///////////////  "Recordings" tab  ///////////////
+
+
+       QWidget* recordingsTab;
+       QGridLayout* recordingsTabLayout;
+         QListWidget* recordingsList;
+         QPushButton* bPlayRecording;
+         QPushButton* bRemoveFromList;
+         QPushButton* bClearRecordingsList;
+         QPushButton* bDeleteRecording;
+         QPushButton* bRemoveAllRecordings;
+
+
+   ///////////////  "About and settings" tab  ///////////////
 
 
         QWidget* othersTab;
