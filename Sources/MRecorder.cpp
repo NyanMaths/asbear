@@ -20,9 +20,7 @@ MRecorder::MRecorder () : QTabWidget ()
 {
     QFontDatabase::addApplicationFont ("Ubuntu.ttf");
     initPalettes ();
-
-
-    readOptions ();  // Read options file
+    readOptions ();
 
     translator = new QTranslator;
     translator->load("mrecorder_" + QString::fromStdString (options.at (0)));
@@ -33,18 +31,15 @@ MRecorder::MRecorder () : QTabWidget ()
     qApp->installTranslator (messageBoxesTranslator);
 
 
-    initRecorder ();     // Initialize "Audio Recorder" tab
-    initRecordingsTab ();// Initialize "Recordings" tab
-    initOthers ();       // Initialize "About and Settings" tab
+    initRecorder ();      // Initialize "Audio Recorder" tab
+    initRecordingsTab (); // Initialize "Recordings" tab
+    initOthers ();        // Initialize "About and Settings" tab
+
 
     loadOptions ();  // Load user's settings
 
-
     setWindowTitle (tr("MRecorder - Home"));
     setWindowIcon (QIcon ("Window Icon.png"));
-
-
-    initUIPalette ();
 
 
     show ();
@@ -88,14 +83,14 @@ void MRecorder::initPalettes ()
 
 void MRecorder::initUIPalette ()
 {
-    options[5] = themeSelecter->currentText ().toStdString ();
+    unsigned short int themeIndex = themeSelecter->currentIndex ();
 
-    if (options.at (5) == tr("Classic Light").toStdString ())
+    if (themeIndex == 0)
     {
         qApp->setStyle (QStyleFactory::create ("WindowsVista"));
         qApp->setPalette (lightPalette);
     }
-    else if (options.at (5) == tr("Fusion Light").toStdString ())
+    else if (themeIndex == 1)
     {
         qApp->setStyle (QStyleFactory::create ("Fusion"));
         qApp->setPalette (lightPalette);
@@ -118,11 +113,12 @@ void MRecorder::readOptions ()
     // Initialize default settings
 
     options.push_back ("en");
-    options.push_back (tr("Vorbis (OGG) : compressed, good quality").toStdString ());
-    options.push_back ("44.1 kHz (CD)");
     options.push_back ("English");
-    options.push_back ("1");
-    options.push_back (tr("Classic Light").toStdString ());
+    options.push_back ("0");  // Theme index
+    options.push_back ("0");  // Codec index
+    options.push_back ("3");  // Sample rate index
+    options.push_back ("1");  // Channel count index
+
 
 
     // Initialize available user settings
@@ -139,15 +135,17 @@ void MRecorder::readOptions ()
 
 void MRecorder::loadOptions ()
 {
-    codecSelecter->setCurrentText (QString::fromStdString (options.at (1)));
-    rateSelecter->setCurrentText (QString::fromStdString (options.at (2)));
-    languageSelecter->setCurrentText (QString::fromStdString (options.at (3)));
-    channelCountSelecter->setCurrentIndex (QString::fromStdString (options.at (4)).toUInt ());
-    themeSelecter->setCurrentText (QString::fromStdString (options.at (5)));
+    codecSelecter->setCurrentIndex (QString::fromStdString (options.at (3)).toUShort ());
+    rateSelecter->setCurrentIndex (QString::fromStdString (options.at (4)).toUShort ());
+    channelCountSelecter->setCurrentIndex (QString::fromStdString (options.at (5)).toUShort ());
+
+    languageSelecter->setCurrentText (QString::fromStdString (options.at (1)));
+    themeSelecter->setCurrentIndex (QString::fromStdString (options.at (2)).toUShort ());
+
+    initUIPalette ();
 
 
     connect (languageSelecter, SIGNAL (currentIndexChanged (int)), this, SLOT (languageChanged ()));
-
     connect (themeSelecter, SIGNAL (currentIndexChanged (int)), this, SLOT (initUIPalette ()));
 }
 
@@ -159,11 +157,11 @@ MRecorder::~MRecorder ()
     if (optionsStream)
     {
         optionsStream<<languageSelecter->currentData ().toString ().toStdString ()<<"\n"
-                     <<codecSelecter->currentText ().toStdString ()<<"\n"
-                     <<rateSelecter->currentText ().toStdString ()<<"\n"
                      <<languageSelecter->currentText ().toStdString ()<<"\n"
-                     <<channelCountSelecter->currentIndex ()<<"\n"
-                     <<themeSelecter->currentText ().toStdString ();
+                     <<themeSelecter->currentIndex ()<<"\n"
+                     <<codecSelecter->currentIndex ()<<"\n"
+                     <<rateSelecter->currentIndex ()<<"\n"
+                     <<channelCountSelecter->currentIndex ()<<"\n";
     }
 
     std::ofstream recordingsFile ("Recordings.pastouche");
@@ -347,6 +345,8 @@ void MRecorder::start ()
 
             optionsBox->setEnabled (false);
         }
+        else
+            setWindowTitle (tr("MRecorder - Home"));
     }
 }
 
@@ -437,6 +437,7 @@ void MRecorder::closeEvent (QCloseEvent* event)
 {
     if (recorder->recording ())
     {
+        setWindowTitle (tr("MRecorder - Paused"));
         QMessageBox::StandardButton answer = QMessageBox::question (this, tr("Wait a second !"), tr("It seems you are still recording,\nDo you want to save before close ?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 
         if (answer == QMessageBox::Yes)
@@ -456,7 +457,11 @@ void MRecorder::closeEvent (QCloseEvent* event)
             event->accept ();
         }
         else
+        {
+            setWindowTitle (tr("MRecorder - Recording..."));
+
             event->ignore ();
+        }
     }
 }
 
@@ -617,7 +622,7 @@ void MRecorder::initOthers ()
         "under <a href = 'https://gnu.org/licenses/lgpl-3.0.en.html'>LGPL 3.0</a> with the framework <a href = 'https://qt.io'>Qt</a> and <a href = 'https://sfml-dev.org'>SFML</a> in C++ language.<br/>"
         "You can also visit <a href = 'https://memetech-inc.weebly.com'>our website</a> to check for updates,<br/>"
         "try other of our applications or <a href = 'https://github.com/NyanMaths/MRecorder/issues'>ask for new features</a> !<br/>"
-        "Click <a href = 'https://github.com/NyanMaths/MRecorder'>here</a> to visit the GitHub page of the project.<br/><br/>"));
+        "Click <a href = 'https://github.com/NyanMaths/MRecorder'>here</a> to visit the GitHub page of the project."));
 
     aboutLabel->setOpenExternalLinks (true);
     aboutLabel->setTextInteractionFlags (Qt::TextBrowserInteraction);
@@ -628,19 +633,19 @@ void MRecorder::initOthers ()
     UIOptionsBoxLayout = new QGridLayout (UIOptionsBox);
     UIOptionsBoxLayout->setAlignment (Qt::AlignLeft);
 
-    chooseLanguageLabel = new QLabel (tr("Choose UI language :"));
+    chooseLanguageLabel = new QLabel (tr("Display language :"));
 
     languageSelecter = new QComboBox;
     languageSelecter->addItem ("English", QVariant ("en"));
     languageSelecter->addItem ("Français", QVariant ("fr"));
 
 
-    chooseThemeLabel = new QLabel (tr("Choose UI theme :"));
+    chooseThemeLabel = new QLabel (tr("Interface theme :"));
 
     themeSelecter = new QComboBox;
-    themeSelecter->addItem (tr("Classic Light"));
-    themeSelecter->addItem (tr("Fusion Light"));
-    themeSelecter->addItem (tr("Fusion Dark"));
+    themeSelecter->addItem (tr("Classic light"));
+    themeSelecter->addItem (tr("Fusion light"));
+    themeSelecter->addItem (tr("Fusion dark"));
 
     UIOptionsBoxLayout->addWidget (chooseLanguageLabel, 0, 0);
     UIOptionsBoxLayout->addWidget (languageSelecter, 0, 1);
@@ -658,7 +663,7 @@ void MRecorder::initOthers ()
 
 void MRecorder::languageChanged ()
 {
-    if (QMessageBox::question (this, tr("Language changed"), tr("You need to reload the application to apply changes.\nDo you want to restart now ?\nSome of your settings will be reseted.")) == QMessageBox::Yes)
+    if (QMessageBox::question (this, tr("Language changed"), tr("You need to reload the application to apply changes.\nDo you want to restart now ?")) == QMessageBox::Yes)
     {
         qApp->quit ();
         QProcess::startDetached (qApp->arguments ()[0], qApp->arguments ());
