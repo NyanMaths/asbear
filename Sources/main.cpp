@@ -1,4 +1,4 @@
-#include "MRecorder.h"
+#include "Application.h"
 
 
 int main (int argc, char** argv)
@@ -6,6 +6,6 @@ int main (int argc, char** argv)
     QApplication app (argc, argv);
 
 
-    MRecorder window;
+    Application MRecorder;
     return app.exec();
 }

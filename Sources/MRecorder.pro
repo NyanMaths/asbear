@@ -5,13 +5,21 @@ CONFIG += c++17
 
 
 SOURCES += \
+        Application.cpp \
         AudioRecorder.cpp \
-        main.cpp \
-        MRecorder.cpp
+        DevicesComboBox.cpp \
+        OptionsWidget.cpp \
+        RecorderWidget.cpp \
+        RecordingsManagerWidget.cpp \
+        main.cpp
 
 HEADERS += \
+        Application.h \
         AudioRecorder.h \
-        MRecorder.h
+        DevicesComboBox.h \
+        OptionsWidget.h \
+        RecorderWidget.h \
+        RecordingsManagerWidget.h
 
 RC_FILE = resources.rc
 
