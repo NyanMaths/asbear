@@ -7,6 +7,7 @@
 AudioRecorder::AudioRecorder () : sf::SoundRecorder ()
 {
     _recording = false;
+    _paused = false;
 }
 
 
@@ -49,9 +50,15 @@ bool AudioRecorder::setOutputStream (const std::string& filename, const unsigned
     return outputStream.openFromFile (filename, sampleRate, channelCount);
 }
 
+unsigned int AudioRecorder::recordingTime ()
+{
+    return _samplesCount / getSampleRate () / 2;
+}
+
 
 bool AudioRecorder::onStart ()  // Called if the user want to start recording
 {
+    _samplesCount = 0;
     _paused = false;
     _recording = true;
 
@@ -61,7 +68,11 @@ bool AudioRecorder::onStart ()  // Called if the user want to start recording
 bool AudioRecorder::onProcessSamples (const sf::Int16* samples, std::size_t samplesCount)  // Saves samples if not paused
 {
     if (!_paused)
+    {
         outputStream.write (&samples[0], samplesCount);
+
+        _samplesCount += samplesCount;
+    }
 
     return true;
 }

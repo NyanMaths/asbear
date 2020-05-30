@@ -19,8 +19,9 @@ class AudioRecorder : public sf::SoundRecorder
         bool paused ();
         bool recording ();
 
-
         bool setOutputStream (const std::string&, const unsigned int&, const unsigned int&);
+
+        unsigned int recordingTime ();
 
 
     private:
@@ -31,6 +32,8 @@ class AudioRecorder : public sf::SoundRecorder
 
         bool _paused;
         bool _recording;
+
+        unsigned long long int _samplesCount;
 
         sf::OutputSoundFile outputStream;
 };

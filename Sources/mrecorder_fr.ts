@@ -77,177 +77,234 @@ Voulez-vous le faire tout de suite ?</translation>
 <context>
     <name>RecorderWidget</name>
     <message>
-        <location filename="RecorderWidget.cpp" line="49"/>
+        <location filename="RecorderWidget.cpp" line="25"/>
+        <source>Begin by clicking on &quot;Start recording&quot;...</source>
+        <translation>Commencez par cliquer sur &quot;Enregistrer&quot;...</translation>
+    </message>
+    <message>
+        <location filename="RecorderWidget.cpp" line="61"/>
         <source>Options</source>
         <translation>Options</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="55"/>
+        <location filename="RecorderWidget.cpp" line="66"/>
         <source>Choose input device :</source>
         <translation>Périphérique d&apos;entrée :</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="58"/>
+        <location filename="RecorderWidget.cpp" line="69"/>
         <source>Choose audio codec :</source>
         <translation>Codec audio :</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="61"/>
+        <location filename="RecorderWidget.cpp" line="72"/>
         <source>Vorbis (OGG) : compressed, good quality</source>
         <translation>Vorbis (OGG) : compressé, bonne qualité</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="62"/>
+        <location filename="RecorderWidget.cpp" line="73"/>
         <source>FLAC : compressed, best quality</source>
         <translation>FLAC : compressé, meilleure qualité</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="63"/>
+        <location filename="RecorderWidget.cpp" line="74"/>
         <source>PCM (WAV) : not compressed, best quality</source>
         <translation>PCM (WAV) : non-compressé, meilleure qualité</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="66"/>
+        <location filename="RecorderWidget.cpp" line="77"/>
         <source>Choose sample rate :</source>
         <translation>Fréquence d&apos;échantillonage :</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="71"/>
+        <location filename="RecorderWidget.cpp" line="82"/>
         <source>Fatal error !</source>
         <translation>Erreur fatale !</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="71"/>
+        <location filename="RecorderWidget.cpp" line="82"/>
         <source>Impossible to load data files, please reinstall this app to fix this !</source>
         <translation>Impossible de charger les fichiers de données,&lt;br/&gt;veuillez réinstaller l&apos;application pour réparer le problème !</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="81"/>
+        <location filename="RecorderWidget.cpp" line="92"/>
         <source>Channels :</source>
         <translation>Canaux :</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="84"/>
+        <location filename="RecorderWidget.cpp" line="95"/>
         <source>Stereo (2)</source>
         <translation>Stéréo (2)</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="87"/>
+        <location filename="RecorderWidget.cpp" line="98"/>
         <source>Reset capture settings</source>
         <translation>Réinitialiser les paramètres</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="103"/>
-        <location filename="RecorderWidget.cpp" line="182"/>
-        <location filename="RecorderWidget.cpp" line="256"/>
-        <location filename="RecorderWidget.cpp" line="289"/>
+        <location filename="RecorderWidget.cpp" line="112"/>
+        <location filename="RecorderWidget.cpp" line="208"/>
+        <location filename="RecorderWidget.cpp" line="285"/>
+        <location filename="RecorderWidget.cpp" line="319"/>
         <source>Start &amp;recording</source>
         <translation>&amp;Enregistrer</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="104"/>
+        <location filename="RecorderWidget.cpp" line="113"/>
         <source>&amp;Pause recording</source>
         <translation>Mettre en &amp;pause</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="105"/>
+        <location filename="RecorderWidget.cpp" line="114"/>
         <source>&amp;Stop recording</source>
         <translation>A&amp;rrêter</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="106"/>
+        <location filename="RecorderWidget.cpp" line="115"/>
         <source>Stop without s&amp;aving</source>
         <translation>&amp;Arrêter sans sauvegarder</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="164"/>
-        <location filename="RecorderWidget.cpp" line="249"/>
+        <location filename="RecorderWidget.cpp" line="173"/>
+        <location filename="RecorderWidget.cpp" line="277"/>
         <source>Confirmation</source>
         <translation>Confirmation</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="164"/>
+        <location filename="RecorderWidget.cpp" line="173"/>
         <source>Do you really want to reset these setings ?</source>
         <translation>Voulez vous vraiment réinitialiser les paramètres ?</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="183"/>
-        <location filename="RecorderWidget.cpp" line="216"/>
-        <location filename="RecorderWidget.cpp" line="270"/>
-        <location filename="RecorderWidget.cpp" line="303"/>
-        <location filename="RecorderWidget.cpp" line="335"/>
+        <location filename="RecorderWidget.cpp" line="190"/>
+        <source>Recording time : 1 second</source>
+        <translation>Temps d&apos;enregistrement : 1 seconde</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="RecorderWidget.cpp" line="190"/>
+        <source>Recording time : %n seconds</source>
+        <translation>
+            <numerusform>Temps d&apos;enregistrement : %n seconde</numerusform>
+            <numerusform>Temps d&apos;enregistrement : %n secondes</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="RecorderWidget.cpp" line="193"/>
+        <source>Recording time : 1 minute </source>
+        <translation>Temps d&apos;enregistrement : 1 minute </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="RecorderWidget.cpp" line="193"/>
+        <source>Recording time : %n minutes </source>
+        <translation>
+            <numerusform>Temps d&apos;enregistrement : %n minute </numerusform>
+            <numerusform>Temps d&apos;enregistrement : %n minutes </numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="RecorderWidget.cpp" line="194"/>
+        <source>and 1 second</source>
+        <translation>et 1 seconde</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="RecorderWidget.cpp" line="194"/>
+        <source>and %n seconds</source>
+        <translation>
+            <numerusform>et %n seconde</numerusform>
+            <numerusform>et %n secondes</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="RecorderWidget.cpp" line="197"/>
+        <source>Recording time : 1 minute</source>
+        <translation>Temps d&apos;enregistrement : 1 minute</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="RecorderWidget.cpp" line="197"/>
+        <source>Recording time : %n minutes</source>
+        <translation>
+            <numerusform>Temps d&apos;enregistrement : %n minute</numerusform>
+            <numerusform>Temps d&apos;enregistrement : %n minutes</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="RecorderWidget.cpp" line="209"/>
+        <location filename="RecorderWidget.cpp" line="244"/>
+        <location filename="RecorderWidget.cpp" line="299"/>
+        <location filename="RecorderWidget.cpp" line="333"/>
+        <location filename="RecorderWidget.cpp" line="365"/>
         <source>MRecorder - Recording...</source>
         <translation>MRecorder - En train d&apos;enregistrer...</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="190"/>
+        <location filename="RecorderWidget.cpp" line="216"/>
         <source>MRecorder - Start recording ?</source>
         <translation>MRecorder - Commencer à enregistrer ?</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="193"/>
+        <location filename="RecorderWidget.cpp" line="219"/>
         <source>Choose output file</source>
         <translation>Choisir le fichier de sortie</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="201"/>
-        <location filename="RecorderWidget.cpp" line="315"/>
+        <location filename="RecorderWidget.cpp" line="227"/>
+        <location filename="RecorderWidget.cpp" line="345"/>
         <source>Wait a second !</source>
         <translation>Minute papillon !</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="201"/>
+        <location filename="RecorderWidget.cpp" line="227"/>
         <source>This file already exists,
 Do you want to replace it ?</source>
         <translation>Ce fichier existe déjà,
 Souhaitez-vous le remplacer ?</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="203"/>
-        <location filename="RecorderWidget.cpp" line="226"/>
-        <location filename="RecorderWidget.cpp" line="257"/>
-        <location filename="RecorderWidget.cpp" line="290"/>
+        <location filename="RecorderWidget.cpp" line="229"/>
+        <location filename="RecorderWidget.cpp" line="254"/>
+        <location filename="RecorderWidget.cpp" line="286"/>
+        <location filename="RecorderWidget.cpp" line="320"/>
         <source>MRecorder - Home</source>
         <translation>MRecorder - Accueil</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="235"/>
+        <location filename="RecorderWidget.cpp" line="263"/>
         <source>&amp;Resume recording</source>
         <translation>R&amp;eprendre</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="236"/>
-        <location filename="RecorderWidget.cpp" line="314"/>
+        <location filename="RecorderWidget.cpp" line="264"/>
+        <location filename="RecorderWidget.cpp" line="344"/>
         <source>MRecorder - Paused</source>
         <translation>MRecorder - En pause</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="246"/>
+        <location filename="RecorderWidget.cpp" line="274"/>
         <source>MRecorder - Stop now ?</source>
         <translation>MRecorder - Arrêter maintenant ?</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="249"/>
+        <location filename="RecorderWidget.cpp" line="277"/>
         <source>Do you really want to stop recording ?</source>
         <translation>Voulez-vous vraiment arrêter d&apos;enregistrer ?</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="278"/>
+        <location filename="RecorderWidget.cpp" line="307"/>
         <source>MRecorder - Stop without saving ?</source>
         <translation>MRecorder - Abandonner l&apos;enregistrement ?</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="281"/>
+        <location filename="RecorderWidget.cpp" line="310"/>
         <source>Beware !</source>
         <translation>Attention !</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="281"/>
+        <location filename="RecorderWidget.cpp" line="310"/>
         <source>Do you really want to abort recording ?</source>
         <translation>Voulez vous vraiment abandonner l&apos;enregistrement ?</translation>
     </message>
     <message>
-        <location filename="RecorderWidget.cpp" line="315"/>
+        <location filename="RecorderWidget.cpp" line="345"/>
         <source>It seems you are still recording,
 Do you want to save before close ?</source>
         <translation>Il semble que vous enregistrez toujours,
@@ -347,72 +404,99 @@ Durée : </translation>
     </message>
     <message>
         <location filename="RecordingsManagerWidget.cpp" line="163"/>
-        <location filename="RecordingsManagerWidget.cpp" line="166"/>
-        <source> seconds</source>
-        <translation> secondes</translation>
+        <location filename="RecordingsManagerWidget.cpp" line="167"/>
+        <source>1 second</source>
+        <oldsource> seconds</oldsource>
+        <translation>1 seconde</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="RecordingsManagerWidget.cpp" line="163"/>
+        <location filename="RecordingsManagerWidget.cpp" line="167"/>
+        <source>%n seconds</source>
+        <translation>
+            <numerusform>%n seconde</numerusform>
+            <numerusform>%n secondes</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="RecordingsManagerWidget.cpp" line="166"/>
-        <source> minutes and </source>
-        <translation> minutes et </translation>
+        <source>1 minute and </source>
+        <oldsource> minutes and </oldsource>
+        <translation>1 minutes et </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="RecordingsManagerWidget.cpp" line="166"/>
+        <source>%n minutes and </source>
+        <translation>
+            <numerusform>%n minute et </numerusform>
+            <numerusform>%n minutes et </numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="RecordingsManagerWidget.cpp" line="169"/>
-        <source> minutes</source>
-        <translation> minutes</translation>
+        <location filename="RecordingsManagerWidget.cpp" line="170"/>
+        <source>1 minute</source>
+        <translation>1 minute</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="RecordingsManagerWidget.cpp" line="170"/>
+        <source>%n minutes</source>
+        <translation>
+            <numerusform>%n minute</numerusform>
+            <numerusform>%n minutes</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="RecordingsManagerWidget.cpp" line="171"/>
+        <location filename="RecordingsManagerWidget.cpp" line="172"/>
         <source>File properties</source>
         <translation>Propriétés du fichier</translation>
     </message>
     <message>
-        <location filename="RecordingsManagerWidget.cpp" line="197"/>
-        <location filename="RecordingsManagerWidget.cpp" line="210"/>
-        <location filename="RecordingsManagerWidget.cpp" line="221"/>
+        <location filename="RecordingsManagerWidget.cpp" line="198"/>
+        <location filename="RecordingsManagerWidget.cpp" line="211"/>
+        <location filename="RecordingsManagerWidget.cpp" line="222"/>
         <source>Confirmation</source>
         <translation>Confirmation</translation>
     </message>
     <message>
-        <location filename="RecordingsManagerWidget.cpp" line="197"/>
+        <location filename="RecordingsManagerWidget.cpp" line="198"/>
         <source>Do you really want to clear the list ?
 This won&apos;t remove your recordings.</source>
         <translation>Voulez-vous vraiment effacer la liste ? Cela n&apos;effacera pas vos enregistrements.</translation>
     </message>
     <message>
-        <location filename="RecordingsManagerWidget.cpp" line="210"/>
+        <location filename="RecordingsManagerWidget.cpp" line="211"/>
         <source>Do you really want to permanently delete
 </source>
         <translation>Voulez-vous vraiment supprimer définitivement
 </translation>
     </message>
     <message>
-        <location filename="RecordingsManagerWidget.cpp" line="213"/>
-        <location filename="RecordingsManagerWidget.cpp" line="228"/>
+        <location filename="RecordingsManagerWidget.cpp" line="214"/>
+        <location filename="RecordingsManagerWidget.cpp" line="229"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="RecordingsManagerWidget.cpp" line="213"/>
+        <location filename="RecordingsManagerWidget.cpp" line="214"/>
         <source>Impossible to delete this file,
 you must already did it.</source>
         <translation>Impossible de supprimer ce fichier,
 vous l&apos;avez probablement déjà fait.</translation>
     </message>
     <message>
-        <location filename="RecordingsManagerWidget.cpp" line="228"/>
+        <location filename="RecordingsManagerWidget.cpp" line="229"/>
         <source>Impossible to delete </source>
         <translation>Impossible de supprimer </translation>
     </message>
     <message>
-        <location filename="RecordingsManagerWidget.cpp" line="228"/>
+        <location filename="RecordingsManagerWidget.cpp" line="229"/>
         <source>
 You must already did it.</source>
         <translation>
 Vous l&apos;avez probablement déjà fait.</translation>
     </message>
     <message>
-        <location filename="RecordingsManagerWidget.cpp" line="221"/>
+        <location filename="RecordingsManagerWidget.cpp" line="222"/>
         <source>Do you really want to remove all your recordings ?
 This action cannot be undone.</source>
         <translation>Voulez-vous vraiment supprimer tous vos enregistrements ? Cette action ne pourra pas être annulée.</translation>

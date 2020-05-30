@@ -160,13 +160,14 @@ void RecordingsManagerWidget::displayProperties ()
         unsigned int seconds = int (music.getDuration ().asSeconds ()) % 60;
 
         if (!minutes)
-            properties += QString::number (seconds) + tr(" seconds");
+            properties += seconds == 1 ? tr("1 second") : tr("%n seconds", "", seconds);
 
         else if (seconds)
-            properties += QString::number (minutes) + tr(" minutes and ") + QString::number (seconds) + tr(" seconds");
+            properties += (minutes == 1 ? tr("1 minute and ") : tr("%n minutes and ", "", minutes)) +
+                          (seconds == 1 ? tr("1 second") : tr("%n seconds", "", seconds));
 
         else
-            properties += QString::number (minutes) + tr(" minutes");
+            properties += minutes == 1 ? tr("1 minute") : tr("%n minutes", "", minutes);
 
         QMessageBox::information (this, tr("File properties"), properties);
     }

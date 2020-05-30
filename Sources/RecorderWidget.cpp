@@ -1,4 +1,5 @@
 #include <QCloseEvent>
+#include <QStandardPaths>
 #include <QFile>
 #include <fstream>
 
@@ -10,16 +11,23 @@
 
 RecorderWidget::RecorderWidget (QWidget* parent, RecordingsManagerWidget* displayTab) : QWidget ()
 {
-    layout = new QVBoxLayout (this);
-
-    recorder = new AudioRecorder;
-
     recordingsTab = displayTab;
     mainWindow = parent;
 
+    layout = new QVBoxLayout (this);
+
+
+    recorder = new AudioRecorder;
+
+    timer = new QTimer (this);
+    timer->setTimerType (Qt::PreciseTimer);
+    connect (timer, SIGNAL (timeout ()), this, SLOT (updateTimerLabel ()));
+
+    timerLabel = new QLabel (tr("Begin by clicking on \"Start recording\"..."));
+    timerLabel->setAlignment (Qt::AlignCenter);
+
 
     initOptionsBox ();
-
 
     optionsBoxLayout->addWidget (chooseDeviceLabel, 0, 0);
     optionsBoxLayout->addWidget (deviceSelecter, 0, 1);
@@ -41,13 +49,17 @@ RecorderWidget::RecorderWidget (QWidget* parent, RecordingsManagerWidget* displa
     initRecordControlsBox ();
 
 
+    layout->addWidget (optionsBox);
+    layout->addWidget (recordControlsBox);
+    layout->addWidget (timerLabel);
+
+
     loadOptions ();
 }
 
 void RecorderWidget::initOptionsBox ()
 {
     optionsBox = new QGroupBox (tr("Options"));
-    layout->addWidget (optionsBox);
     optionsBoxLayout = new QGridLayout (optionsBox);
     optionsBoxLayout->setSpacing (15);
 
@@ -95,8 +107,6 @@ void RecorderWidget::initOptionsBox ()
 void RecorderWidget::initRecordControlsBox ()
 {
     recordControlsBox = new QWidget;
-    layout->addWidget (recordControlsBox);
-
     recordControlsLayout = new QHBoxLayout (recordControlsBox);
 
 
@@ -171,6 +181,23 @@ void RecorderWidget::resetCaptureSettings ()
     }
 }
 
+void RecorderWidget::updateTimerLabel ()
+{
+    unsigned int seconds = recorder->recordingTime ();
+    unsigned int minutes = seconds / 60;
+    seconds %= 60;
+
+    if (!minutes)
+        timerLabel->setText (seconds == 1 ? tr("Recording time : 1 second") : tr("Recording time : %n seconds", "", seconds));
+
+    else if (seconds)
+        timerLabel->setText ((minutes == 1 ? tr("Recording time : 1 minute ") : tr("Recording time : %n minutes ", "", minutes)) +
+                             (seconds == 1 ? tr("and 1 second") : tr("and %n seconds", "", seconds)));
+
+    else
+        timerLabel->setText (minutes == 1 ? tr("Recording time : 1 minute") : tr("Recording time : %n minutes", "", minutes));
+}
+
 
 void RecorderWidget::start ()
 {
@@ -212,6 +239,8 @@ void RecorderWidget::start ()
 
             recorder->start (rateSelecter->currentData ().toUInt ());
 
+            timer->start (100);
+
 
             mainWindow->setWindowTitle (tr("MRecorder - Recording..."));
 
@@ -248,6 +277,7 @@ void RecorderWidget::stop ()
 
     if (QMessageBox::question (this, tr("Confirmation"), tr("Do you really want to stop recording ?")) == QMessageBox::Yes)
     {
+        timer->stop ();
         recorder->stop ();
         recorder->setOutputStream ("", 0, 0);
         recordingsTab->addRecording (outputFileName);
@@ -280,6 +310,7 @@ void RecorderWidget::abort ()
 
     if (QMessageBox::question (this, tr("Beware !"), tr("Do you really want to abort recording ?")) == QMessageBox::Yes)
     {
+        timer->stop ();
         recorder->stop ();
         recorder->setOutputStream ("", 0, 0);
 
