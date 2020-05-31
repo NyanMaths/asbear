@@ -90,13 +90,10 @@ void RecordingsManagerWidget::initActions ()
 
 RecordingsManagerWidget::~RecordingsManagerWidget ()
 {
-    if (recordingsList->count () != 0)  // If the user recorded something
-    {
-        std::ofstream recordingsFile ("Recordings.pastouche");
+    std::ofstream recordingsFile ("Recordings.pastouche");
 
-        for (int i = 0 ; i != recordingsList->count () ; i++)
-            recordingsFile<<recordingsList->item (i)->text ().toStdString ()<<"\n";
-    }
+    for (int i = 0 ; i != recordingsList->count () ; i++)
+        recordingsFile<<recordingsList->item (i)->text ().toStdString ()<<"\n";
 }
 
 
@@ -209,7 +206,7 @@ void RecordingsManagerWidget::move ()
 
     QString dest = QFileDialog::getExistingDirectory (this, tr("Select destination folder"), QFileInfo (fileName).dir ().path());
 
-    QString destFileName = dest + "/" + QFileInfo (fileName).fileName ();
+    QString destFileName = (dest + "/" + QFileInfo (fileName).fileName ()).replace ("//", "/");
 
 
     if (dest.isEmpty () || destFileName == fileName)
