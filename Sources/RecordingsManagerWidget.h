@@ -32,6 +32,7 @@ class RecordingsManagerWidget : public QWidget
 
         void displayProperties ();
         void showInExplorer ();
+        void move ();
 
         void deleteRecording ();
         void deleteAllRecordings ();
@@ -50,6 +51,7 @@ class RecordingsManagerWidget : public QWidget
         QPushButton* bPlayRecording;
         QPushButton* bProperties;
         QPushButton* bShowInExplorer;
+        QPushButton* bMove;
         QPushButton* bRemoveFromList;
         QPushButton* bClearRecordingsList;
         QPushButton* bDeleteRecording;

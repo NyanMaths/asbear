@@ -43,7 +43,7 @@ class RecorderWidget : public QWidget
     private:
       void loadOptions ();
 
-      void initRecordControlsBox ();
+      void initControlsBox ();
       void initOptionsBox ();
 
 
@@ -54,7 +54,9 @@ class RecorderWidget : public QWidget
       QTimer* timer;
       QLabel* timerLabel;
 
-      QVBoxLayout* layout;
+      QString outputFileName;
+
+      QGridLayout* layout;
 
       QGroupBox* optionsBox;
       QGridLayout* optionsBoxLayout;
@@ -74,22 +76,12 @@ class RecorderWidget : public QWidget
 
         QPushButton* bResetCaptureSettings;
 
-        QLabel* nyanmathsImage;
+        QLabel* recorderImage;
 
-      QWidget* recordControlsBox;
-      QHBoxLayout* recordControlsLayout;
-
-        QPushButton* bStart;
-        QPushButton* bStop;
-        QPushButton* bPause;
-        QPushButton* bAbort;
-
-        QLabel* startLabel;
-        QLabel* stopLabel;
-        QLabel* pauseLabel;
-        QLabel* abortLabel;
-
-      QString outputFileName;
+      QPushButton* bStart;
+      QPushButton* bStop;
+      QPushButton* bPause;
+      QPushButton* bAbort;
 };
 
 

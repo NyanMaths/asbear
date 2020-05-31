@@ -10,7 +10,6 @@ AudioRecorder::AudioRecorder () : sf::SoundRecorder ()
     _paused = false;
 }
 
-
 AudioRecorder::~AudioRecorder ()  // Stop and clean recorder before removal
 {
     stop ();
@@ -31,14 +30,19 @@ void AudioRecorder::resume ()
 }
 
 
-bool AudioRecorder::paused ()
+void AudioRecorder::onStop ()  // Called if the user want to stop recording
 {
-    return _paused;
+    _recording = false;
+    _paused = false;
 }
 
-bool AudioRecorder::recording ()
+bool AudioRecorder::onStart ()  // Called if the user want to start recording
 {
-    return _recording;
+    _samplesCount = 0;
+    _paused = false;
+    _recording = true;
+
+    return true;
 }
 
 
@@ -50,20 +54,22 @@ bool AudioRecorder::setOutputStream (const std::string& filename, const unsigned
     return outputStream.openFromFile (filename, sampleRate, channelCount);
 }
 
+
+bool AudioRecorder::paused ()
+{
+    return _paused;
+}
+
+bool AudioRecorder::recording ()
+{
+    return _recording;
+}
+
 unsigned int AudioRecorder::recordingTime ()
 {
-    return _samplesCount / getSampleRate () / 2;
+    return _samplesCount / getSampleRate () / getChannelCount ();
 }
 
-
-bool AudioRecorder::onStart ()  // Called if the user want to start recording
-{
-    _samplesCount = 0;
-    _paused = false;
-    _recording = true;
-
-    return true;
-}
 
 bool AudioRecorder::onProcessSamples (const sf::Int16* samples, std::size_t samplesCount)  // Saves samples if not paused
 {
@@ -75,11 +81,5 @@ bool AudioRecorder::onProcessSamples (const sf::Int16* samples, std::size_t samp
     }
 
     return true;
-}
-
-void AudioRecorder::onStop ()  // Called if the user want to stop recording
-{
-    _recording = false;
-    _paused = false;
 }
 

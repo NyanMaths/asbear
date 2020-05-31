@@ -1,15 +1,15 @@
-#include <fstream>
 #include <windows.h>
-
+#include <fstream>
 #include <QFile>
 #include <QFileInfo>
 #include <QDateTime>
 
+#include "RecordingsManagerWidget.h"
+
 #include <QMessageBox>
+#include <QFileDialog>
 
 #include <SFML/Audio.hpp>
-
-#include "RecordingsManagerWidget.h"
 
 
 ////////////// Initialize widget
@@ -42,18 +42,20 @@ RecordingsManagerWidget::RecordingsManagerWidget () : QWidget ()
     layout->addWidget (bPlayRecording, 0, 1);
     layout->addWidget (bProperties, 1, 1);
     layout->addWidget (bShowInExplorer, 2, 1);
-    layout->addWidget (bRemoveFromList, 3, 1);
-    layout->addWidget (bClearRecordingsList, 4, 1);
-    layout->addWidget (bDeleteRecording, 5, 1);
-    layout->addWidget (bRemoveAllRecordings, 6, 1);
-    layout->addWidget (recordingsList, 0, 0, 7, 1);
+    layout->addWidget (bMove, 3, 1);
+    layout->addWidget (bRemoveFromList, 4, 1);
+    layout->addWidget (bClearRecordingsList, 5, 1);
+    layout->addWidget (bDeleteRecording, 6, 1);
+    layout->addWidget (bRemoveAllRecordings, 7, 1);
+    layout->addWidget (recordingsList, 0, 0, 8, 1);
 }
 
 void RecordingsManagerWidget::initActions ()
 {
     bPlayRecording = new QPushButton (tr("&Play"));
     bProperties = new QPushButton (tr("Pr&operties"));
-    bShowInExplorer = new QPushButton (tr("&Show in explorer"));
+    bShowInExplorer = new QPushButton (tr("Op&en folder"));
+    bMove = new QPushButton (tr("&Move to..."));
     bRemoveFromList = new QPushButton (tr("&Remove from list"));
     bClearRecordingsList = new QPushButton (tr("&Clear list"));
     bDeleteRecording = new QPushButton (tr("&Delete"));
@@ -62,6 +64,7 @@ void RecordingsManagerWidget::initActions ()
     bPlayRecording->setEnabled (false);
     bProperties->setEnabled (false);
     bShowInExplorer->setEnabled (false);
+    bMove->setEnabled (false);
     bDeleteRecording->setEnabled (false);
     bRemoveFromList->setEnabled (false);
 
@@ -74,6 +77,7 @@ void RecordingsManagerWidget::initActions ()
     connect (bPlayRecording, SIGNAL (clicked ()), this, SLOT (playRecording ()));
     connect (bProperties, SIGNAL (clicked ()), this, SLOT (displayProperties ()));
     connect (bShowInExplorer, SIGNAL (clicked ()), this, SLOT (showInExplorer ()));
+    connect (bMove, SIGNAL (clicked ()), this, SLOT (move ()));
     connect (bRemoveFromList, SIGNAL (clicked ()), this, SLOT (removeFromList ()));
     connect (bClearRecordingsList, SIGNAL (clicked ()), this, SLOT (clearRecordingsList ()));
     connect (bDeleteRecording, SIGNAL (clicked ()), this, SLOT (deleteRecording ()));
@@ -86,10 +90,13 @@ void RecordingsManagerWidget::initActions ()
 
 RecordingsManagerWidget::~RecordingsManagerWidget ()
 {
-    std::ofstream recordingsFile ("Recordings.pastouche");
+    if (recordingsList->count () != 0)  // If the user recorded something
+    {
+        std::ofstream recordingsFile ("Recordings.pastouche");
 
-    for (int i = 0 ; i != recordingsList->count () ; i++)
-        recordingsFile<<recordingsList->item (i)->text ().toStdString ()<<"\n";
+        for (int i = 0 ; i != recordingsList->count () ; i++)
+            recordingsFile<<recordingsList->item (i)->text ().toStdString ()<<"\n";
+    }
 }
 
 
@@ -101,6 +108,7 @@ void RecordingsManagerWidget::recordingClicked ()
     bPlayRecording->setEnabled (true);
     bProperties->setEnabled (true);
     bShowInExplorer->setEnabled (true);
+    bMove->setEnabled (true);
     bDeleteRecording->setEnabled (true);
     bRemoveFromList->setEnabled (true);
 }
@@ -112,6 +120,7 @@ void RecordingsManagerWidget::updateUI ()
         bPlayRecording->setEnabled (false);
         bProperties->setEnabled (false);
         bShowInExplorer->setEnabled (false);
+        bMove->setEnabled (false);
         bDeleteRecording->setEnabled (false);
         bRemoveFromList->setEnabled (false);
 
@@ -138,14 +147,21 @@ void RecordingsManagerWidget::displayProperties ()
 
     sf::Music music;
     if (!music.openFromFile (fileName.toStdString ()))
-        QMessageBox::critical (this, tr("Ooooops..."), tr("Impossible to load this file,\nit must be corrupted or deleted !"));
-
+    {
+        if (QMessageBox::question (this, tr("Ooooops..."), tr("Impossible to load this file,\nit must be corrupted !\nDo you want to delete it ?")) == QMessageBox::Yes)
+        {
+            QFile::remove (recordingsList->currentItem ()->text ());
+            removeCurrentFromList ();
+        }
+    }
     else
     {
         QFile file (fileName);
 
         QString properties (tr("Name : ") + fileName +
                             tr("\nRecorded on : ") + QFileInfo (file).birthTime ().date ().toString (tr("MM/dd/yyyy")) +
+                            tr("\n\nSample rate : ") + QString::number (music.getSampleRate ()) + " Hz" +
+                            tr("\nChannels : ") + QString::number (music.getChannelCount ()) +
                             tr("\nSize : "));
 
 
@@ -185,6 +201,37 @@ void RecordingsManagerWidget::showInExplorer ()
 
 
     ShellExecuteA (nullptr, "explore", fileFolder.replace ("/", "\\").toUtf8 (), "", "", SW_SHOWDEFAULT);
+}
+
+void RecordingsManagerWidget::move ()
+{
+    QString fileName = recordingsList->currentItem ()->text ();
+
+    QString dest = QFileDialog::getExistingDirectory (this, tr("Select destination folder"), QFileInfo (fileName).dir ().path());
+
+    QString destFileName = dest + "/" + QFileInfo (fileName).fileName ();
+
+
+    if (dest.isEmpty () || destFileName == fileName)
+        return;
+
+    if (QFile::exists (destFileName))
+    {
+        if (QMessageBox::question (this, tr("Confirmation"), tr("A file with the same name already exists there,\ndo you want to replace it ?")) != QMessageBox::Yes)
+            return;
+
+        QFile::remove (destFileName);
+        removeCurrentFromList ();
+    }
+
+
+    QFile::copy (fileName, destFileName);
+
+    QFile::remove (fileName);
+    recordingsList->currentItem ()->setText (destFileName);
+
+
+    QMessageBox::information (this, tr("Operation successful !"), tr("File ") + fileName + tr("\nmoved to ") + dest);
 }
 
 

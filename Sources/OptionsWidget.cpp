@@ -51,7 +51,12 @@ OptionsWidget::OptionsWidget () : QWidget ()
     UIOptionsBoxLayout->addWidget (themeSelecter, 1, 1);
 
 
-    layout->addWidget (aboutLabel, 0, 0, 1, 2);
+    NY4N_M4THS = new QLabel;
+    NY4N_M4THS->setPixmap (QPixmap ("NY4N_M4THS.png"));
+
+
+    layout->addWidget (aboutLabel, 0, 0);
+    layout->addWidget (NY4N_M4THS, 0, 1, Qt::AlignRight);
     layout->addWidget (UIOptionsBox, 1, 0);
 
     loadOptions ();

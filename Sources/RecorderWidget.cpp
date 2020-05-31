@@ -14,7 +14,7 @@ RecorderWidget::RecorderWidget (QWidget* parent, RecordingsManagerWidget* displa
     recordingsTab = displayTab;
     mainWindow = parent;
 
-    layout = new QVBoxLayout (this);
+    layout = new QGridLayout (this);
 
 
     recorder = new AudioRecorder;
@@ -43,15 +43,18 @@ RecorderWidget::RecorderWidget (QWidget* parent, RecordingsManagerWidget* displa
 
     optionsBoxLayout->addWidget (bResetCaptureSettings, 4, 0);
 
-    optionsBoxLayout->addWidget (nyanmathsImage, 0, 2, 4, 1);
+    optionsBoxLayout->addWidget (recorderImage, 0, 2, 4, 1);
 
 
-    initRecordControlsBox ();
+    initControlsBox ();
 
 
-    layout->addWidget (optionsBox);
-    layout->addWidget (recordControlsBox);
-    layout->addWidget (timerLabel);
+    layout->addWidget (optionsBox, 0, 0, 1, 4);
+    layout->addWidget (bStart, 1, 0);
+    layout->addWidget (bPause, 1, 1);
+    layout->addWidget (bStop, 1, 2);
+    layout->addWidget (bAbort, 1, 3);
+    layout->addWidget (timerLabel, 2, 0, 1, 4);
 
 
     loadOptions ();
@@ -100,31 +103,22 @@ void RecorderWidget::initOptionsBox ()
     connect (bResetCaptureSettings, SIGNAL (clicked ()), this, SLOT (resetCaptureSettings ()));
 
 
-    nyanmathsImage = new QLabel;
-    nyanmathsImage->setPixmap (QPixmap ("NY4N_M4THS.png"));
+    recorderImage = new QLabel;
+    recorderImage->setPixmap (QPixmap ("Recorder Image.png"));
 }
 
-void RecorderWidget::initRecordControlsBox ()
+void RecorderWidget::initControlsBox ()
 {
-    recordControlsBox = new QWidget;
-    recordControlsLayout = new QHBoxLayout (recordControlsBox);
-
-
     bStart = new QPushButton (QIcon ("Start button.png"), tr("Start &recording"));
     bPause = new QPushButton (QIcon ("Pause button.png"), tr("&Pause recording"));
     bStop = new QPushButton (QIcon ("Stop button.png"), tr("&Stop recording"));
     bAbort = new QPushButton (QIcon ("Abort button.png"), tr("Stop without s&aving"));
 
+
     connect (bStart, SIGNAL (clicked ()), this, SLOT (start ()));
     connect (bPause, SIGNAL (clicked ()), this, SLOT (pause ()));
     connect (bStop, SIGNAL (clicked ()), this, SLOT (stop ()));
     connect (bAbort, SIGNAL (clicked ()), this, SLOT (abort ()));
-
-
-    recordControlsLayout->addWidget (bStart);
-    recordControlsLayout->addWidget (bPause);
-    recordControlsLayout->addWidget (bStop);
-    recordControlsLayout->addWidget (bAbort);
 
 
     bPause->setEnabled (false);

@@ -49,6 +49,8 @@ class OptionsWidget : public QWidget
         QComboBox* languageSelecter;
         QLabel* chooseThemeLabel;
         QComboBox* themeSelecter;
+
+        QLabel* NY4N_M4THS;
 };
 
 
