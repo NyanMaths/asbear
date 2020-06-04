@@ -13,7 +13,7 @@ class DevicesComboBox : public QComboBox
 
 
     private:
-       void mouseReleaseEvent (QMouseEvent* event);
+       virtual void mousePressEvent (QMouseEvent*);
 
        std::vector<std::string> devices;
 };

@@ -46,6 +46,8 @@ class RecorderWidget : public QWidget
       void initControlsBox ();
       void initOptionsBox ();
 
+      void getFileInfos (unsigned int&, unsigned short int&);
+
 
       RecordingsManagerWidget* recordingsTab;
       QWidget* mainWindow;
@@ -56,6 +58,7 @@ class RecorderWidget : public QWidget
 
       QString outputFileName;
 
+
       QGridLayout* layout;
 
       QGroupBox* optionsBox;
@@ -63,16 +66,18 @@ class RecorderWidget : public QWidget
 
         QLabel* chooseDeviceLabel;
         QComboBox* deviceSelecter;
-        QTimer* devicesTimer;
 
-        QLabel* chooseCodecLabel;
-        QComboBox* codecSelecter;
+        QGroupBox* advancedOptionsBox;
+        QGridLayout* advancedOptionsBoxLayout;
 
-        QLabel* chooseRateLabel;
-        QComboBox* rateSelecter;
+          QLabel* chooseCodecLabel;
+          QComboBox* codecSelecter;
 
-        QLabel* chooseChannelCountLabel;
-        QComboBox* channelCountSelecter;
+          QLabel* chooseRateLabel;
+          QComboBox* rateSelecter;
+
+          QLabel* chooseChannelCountLabel;
+          QComboBox* channelCountSelecter;
 
         QPushButton* bResetCaptureSettings;
 

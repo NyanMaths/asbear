@@ -19,7 +19,7 @@ class AudioRecorder : public sf::SoundRecorder
         bool paused ();
         bool recording ();
 
-        bool setOutputStream (const std::string&, const unsigned int&, const unsigned int&);
+        bool setOutputStream (std::string, unsigned int, unsigned int);
 
         unsigned int recordingTime ();
 

@@ -1,5 +1,4 @@
 #include <QCloseEvent>
-#include <QStandardPaths>
 #include <QFile>
 #include <fstream>
 
@@ -7,6 +6,9 @@
 #include <QFileDialog>
 
 #include "RecorderWidget.h"
+
+
+////////////// Initialize widget
 
 
 RecorderWidget::RecorderWidget (QWidget* parent, RecordingsManagerWidget* displayTab) : QWidget ()
@@ -32,18 +34,20 @@ RecorderWidget::RecorderWidget (QWidget* parent, RecordingsManagerWidget* displa
     optionsBoxLayout->addWidget (chooseDeviceLabel, 0, 0);
     optionsBoxLayout->addWidget (deviceSelecter, 0, 1);
 
-    optionsBoxLayout->addWidget (chooseCodecLabel, 1, 0);
-    optionsBoxLayout->addWidget (codecSelecter, 1, 1);
+    optionsBoxLayout->addWidget (advancedOptionsBox, 1, 0, 1, 2);
 
-    optionsBoxLayout->addWidget (chooseRateLabel, 2, 0);
-    optionsBoxLayout->addWidget (rateSelecter, 2, 1);
+    advancedOptionsBoxLayout->addWidget (chooseCodecLabel, 0, 0);
+    advancedOptionsBoxLayout->addWidget (codecSelecter, 0, 1);
 
-    optionsBoxLayout->addWidget (chooseChannelCountLabel, 3, 0);
-    optionsBoxLayout->addWidget (channelCountSelecter, 3, 1);
+    advancedOptionsBoxLayout->addWidget (chooseRateLabel, 1, 0);
+    advancedOptionsBoxLayout->addWidget (rateSelecter, 1, 1);
 
-    optionsBoxLayout->addWidget (bResetCaptureSettings, 4, 0);
+    advancedOptionsBoxLayout->addWidget (chooseChannelCountLabel, 2, 0);
+    advancedOptionsBoxLayout->addWidget (channelCountSelecter, 2, 1);
 
-    optionsBoxLayout->addWidget (recorderImage, 0, 2, 4, 1);
+    optionsBoxLayout->addWidget (bResetCaptureSettings, 2, 0);
+
+    optionsBoxLayout->addWidget (recorderImage, 1, 2);
 
 
     initControlsBox ();
@@ -66,11 +70,17 @@ void RecorderWidget::initOptionsBox ()
     optionsBoxLayout = new QGridLayout (optionsBox);
     optionsBoxLayout->setSpacing (15);
 
-
     chooseDeviceLabel = new QLabel (tr("Choose input device :"));
     deviceSelecter = new DevicesComboBox;
 
-    chooseCodecLabel = new QLabel (tr("Choose audio codec :"));
+
+    advancedOptionsBox = new QGroupBox (tr("Advanced coding options"));
+    advancedOptionsBox->setCheckable (true);
+    advancedOptionsBoxLayout = new QGridLayout (advancedOptionsBox);
+    advancedOptionsBoxLayout->setSpacing (15);
+    advancedOptionsBoxLayout->setAlignment (Qt::AlignLeft);
+
+    chooseCodecLabel = new QLabel (tr("Audio encoder :"));
     codecSelecter = new QComboBox;
 
     codecSelecter->addItem (tr("Vorbis (OGG) : compressed, good quality"), QVariant ("ogg"));
@@ -78,7 +88,7 @@ void RecorderWidget::initOptionsBox ()
     codecSelecter->addItem (tr("PCM (WAV) : not compressed, best quality"), QVariant ("wav"));
 
 
-    chooseRateLabel = new QLabel (tr("Choose sample rate :"));
+    chooseRateLabel = new QLabel (tr("Sample rate :"));
     rateSelecter = new QComboBox;
 
     std::ifstream datFile ("Rates.pastouche");
@@ -101,7 +111,6 @@ void RecorderWidget::initOptionsBox ()
 
     bResetCaptureSettings = new QPushButton (tr("Reset capture settings"));
     connect (bResetCaptureSettings, SIGNAL (clicked ()), this, SLOT (resetCaptureSettings ()));
-
 
     recorderImage = new QLabel;
     recorderImage->setPixmap (QPixmap ("Recorder Image.png"));
@@ -128,22 +137,18 @@ void RecorderWidget::initControlsBox ()
 
 void RecorderWidget::loadOptions ()
 {
+    QStringList settings = {"0", "3", "1", "0"};
+
     QFile optionsFile ("Recorder Options.pastouche");
 
     if (optionsFile.open (QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QStringList settings = QString (optionsFile.readAll ()).split ("\n");
+        settings = QString (optionsFile.readAll ()).split ("\n");
 
-        codecSelecter->setCurrentIndex (settings.at (0).toUShort ());
-        rateSelecter->setCurrentIndex (settings.at (1).toUShort ());
-        channelCountSelecter->setCurrentIndex (settings.at (2).toUShort ());
-    }
-    else
-    {
-        codecSelecter->setCurrentIndex (0);
-        rateSelecter->setCurrentIndex (3);
-        channelCountSelecter->setCurrentIndex (1);
-    }
+
+    codecSelecter->setCurrentIndex (settings.at (0).toUShort ());
+    rateSelecter->setCurrentIndex (settings.at (1).toUShort ());
+    channelCountSelecter->setCurrentIndex (settings.at (2).toUShort ());
+    advancedOptionsBox->setChecked (settings.at (3).toUShort ());
 }
 
 
@@ -155,7 +160,8 @@ RecorderWidget::~RecorderWidget ()
     {
         optionsFile<<codecSelecter->currentIndex ()<<"\n"
                    <<rateSelecter->currentIndex ()<<"\n"
-                   <<channelCountSelecter->currentIndex ();
+                   <<channelCountSelecter->currentIndex ()<<"\n"
+                   <<advancedOptionsBox->isChecked ();
     }
 }
 
@@ -193,6 +199,28 @@ void RecorderWidget::updateTimerLabel ()
 }
 
 
+void RecorderWidget::getFileInfos (unsigned int& sampleRate, unsigned short int& channelCount)
+{
+    QString codec ("ogg");
+
+    if (advancedOptionsBox->isChecked ())
+    {
+        codec = codecSelecter->currentData ().toString ();
+        sampleRate = rateSelecter->currentData ().toUInt ();
+        channelCount = channelCountSelecter->currentData ().toUInt ();
+    }
+
+
+    outputFileName = QFileDialog::getSaveFileName (this, tr("Choose output file"), "", tr("Audio files (*.") + codec + ")", nullptr, QFileDialog::DontConfirmOverwrite | QFileDialog::DontUseNativeDialog);
+
+    if (outputFileName.isEmpty ())
+        return;
+
+
+    if (!outputFileName.contains (QRegExp ("\\." + codec + "$", Qt::CaseInsensitive)))
+        outputFileName += "." + codec;
+}
+
 void RecorderWidget::start ()
 {
     if (recorder->paused ())
@@ -211,12 +239,12 @@ void RecorderWidget::start ()
         mainWindow->setWindowTitle (tr("MRecorder - Start recording ?"));
 
 
-        outputFileName = QFileDialog::getSaveFileName (this, tr("Choose output file"));
+        unsigned int sampleRate = 44100;
+        unsigned short int channelCount = 2;
+        getFileInfos (sampleRate, channelCount);
 
         if (!outputFileName.isEmpty ())
         {
-            outputFileName += "." + codecSelecter->currentData ().toString ();
-
             if (QFile::exists (outputFileName))
             {
                 if (QMessageBox::question (this, tr("Wait a second !"), tr("This file already exists,\nDo you want to replace it ?")) == QMessageBox::No)
@@ -226,13 +254,11 @@ void RecorderWidget::start ()
                 }
             }
 
-            recorder->setOutputStream (outputFileName.toStdString (), rateSelecter->currentData ().toUInt (), channelCountSelecter->currentData ().toUInt ());
-
+            recorder->setOutputStream (std::string (outputFileName.toLocal8Bit ()), sampleRate, channelCount);
             recorder->setDevice (deviceSelecter->currentText ().toStdString ());
-            recorder->setChannelCount (channelCountSelecter->currentData ().toUInt ());
+            recorder->setChannelCount (channelCount);
 
-            recorder->start (rateSelecter->currentData ().toUInt ());
-
+            recorder->start (sampleRate);
             timer->start (100);
 
 
@@ -250,6 +276,7 @@ void RecorderWidget::start ()
     }
 }
 
+
 void RecorderWidget::pause ()
 {
     recorder->pause ();
@@ -261,6 +288,7 @@ void RecorderWidget::pause ()
     bStart->setEnabled (true);
     bPause->setEnabled (false);
 }
+
 
 void RecorderWidget::stop ()
 {
@@ -294,6 +322,7 @@ void RecorderWidget::stop ()
         mainWindow->setWindowTitle (tr("MRecorder - Recording..."));
     }
 }
+
 
 void RecorderWidget::abort ()
 {

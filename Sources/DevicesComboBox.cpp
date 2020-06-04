@@ -1,10 +1,11 @@
 #include "DevicesComboBox.h"
-#include "AudioRecorder.h"
+
+#include <SFML/Audio.hpp>
 
 
 DevicesComboBox::DevicesComboBox () : QComboBox ()
 {
-    devices = AudioRecorder::getAvailableDevices ();
+    devices = sf::SoundRecorder::getAvailableDevices ();
 
     for (unsigned short int i = 0 ; i != devices.size () ; i++)
         addItem (QString::fromStdString (devices.at (i)));
@@ -13,18 +14,20 @@ DevicesComboBox::DevicesComboBox () : QComboBox ()
     setCurrentIndex (0);
 }
 
-void DevicesComboBox::mouseReleaseEvent (QMouseEvent* event)
+void DevicesComboBox::mousePressEvent (QMouseEvent* event)
 {
+    QString currentDevice (currentText ());
+    devices = sf::SoundRecorder::getAvailableDevices ();
+
     clear ();
-
-
-    devices = AudioRecorder::getAvailableDevices ();
 
     for (unsigned short int i = 0 ; i != devices.size () ; i++)
         addItem (QString::fromStdString (devices.at (i)));
 
+    setCurrentText (currentDevice);
 
     showPopup ();
-    hidePopup ();
+
+
     event->accept ();
 }

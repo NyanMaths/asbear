@@ -49,7 +49,7 @@ bool AudioRecorder::onStart ()  // Called if the user want to start recording
 ////////////////////////////////////////  Others
 
 
-bool AudioRecorder::setOutputStream (const std::string& filename, const unsigned int& sampleRate, const unsigned int& channelCount)
+bool AudioRecorder::setOutputStream (std::string filename, unsigned int sampleRate, unsigned int channelCount)
 {
     return outputStream.openFromFile (filename, sampleRate, channelCount);
 }

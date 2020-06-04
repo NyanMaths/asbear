@@ -24,7 +24,7 @@ class OptionsWidget : public QWidget
 
 
     private slots:
-        void changeLanguage ();
+        void promptToRestart ();
         void changeTheme (int);
 
 

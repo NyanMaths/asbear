@@ -7,6 +7,9 @@
 #include "OptionsWidget.h"
 
 
+////////////// Initialize widget
+
+
 OptionsWidget::OptionsWidget () : QWidget ()
 {
     layout = new QGridLayout (this);
@@ -55,9 +58,9 @@ OptionsWidget::OptionsWidget () : QWidget ()
     NY4N_M4THS->setPixmap (QPixmap ("NY4N_M4THS.png"));
 
 
-    layout->addWidget (aboutLabel, 0, 0);
-    layout->addWidget (NY4N_M4THS, 0, 1, Qt::AlignRight);
-    layout->addWidget (UIOptionsBox, 1, 0);
+    layout->addWidget (aboutLabel, 0, 0, 1, 3);
+    layout->addWidget (NY4N_M4THS, 0, 3, Qt::AlignRight);
+    layout->addWidget (UIOptionsBox, 1, 0, 1, 2);
 
     loadOptions ();
 }
@@ -65,17 +68,19 @@ OptionsWidget::OptionsWidget () : QWidget ()
 
 void OptionsWidget::loadOptions ()
 {
+    QStringList settings {"en", "English", "0"};
+
     QFile settingsFile ("UI Options.pastouche");
 
     if (settingsFile.open (QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QStringList data = QString (settingsFile.readAll ()).split ("\n");
+        settings = QString (settingsFile.readAll ()).split ("\n");
 
-        languageSelecter->setCurrentText (data.at (1));
-        themeSelecter->setCurrentIndex (data.at (2).toUShort ());
-    }
 
-    connect (languageSelecter, SIGNAL (currentIndexChanged (int)), this, SLOT (changeLanguage ()));
+    languageSelecter->setCurrentText (settings.at (1));
+    themeSelecter->setCurrentIndex (settings.at (2).toUShort ());
+
+
+    connect (languageSelecter, SIGNAL (currentIndexChanged (int)), this, SLOT (promptToRestart ()));
 }
 
 
@@ -116,7 +121,7 @@ void OptionsWidget::changeTheme (int themeIndex)
     qApp->setFont (QFont ("Ubuntu", 12));
 }
 
-void OptionsWidget::changeLanguage ()
+void OptionsWidget::promptToRestart ()
 {
     if (QMessageBox::question (this, tr("Language changed"), tr("You need to reload the application to apply changes.\nDo you want to restart now ?")) == QMessageBox::Yes)
     {
@@ -134,28 +139,25 @@ void OptionsWidget::initPalettes ()
     lightPalette = qApp->palette ();
 
 
-    QColor darkColor = QColor (45, 45, 45);
-    QColor disabledColor = QColor (127, 127, 127);
-
-    darkPalette.setColor (QPalette::Window, darkColor);
+    darkPalette.setColor (QPalette::Window, QColor (53,53,53));
     darkPalette.setColor (QPalette::WindowText, Qt::white);
-    darkPalette.setColor (QPalette::Base, QColor (18, 18, 18));
-    darkPalette.setColor (QPalette::AlternateBase, darkColor);
+    darkPalette.setColor (QPalette::Disabled, QPalette::WindowText, QColor (127,127,127));
+    darkPalette.setColor (QPalette::Base, QColor (42,42,42));
+    darkPalette.setColor (QPalette::AlternateBase, QColor (66,66,66));
     darkPalette.setColor (QPalette::ToolTipBase, Qt::white);
     darkPalette.setColor (QPalette::ToolTipText, Qt::white);
     darkPalette.setColor (QPalette::Text, Qt::white);
-    darkPalette.setColor (QPalette::Disabled, QPalette::Text, disabledColor);
-    darkPalette.setColor (QPalette::Button, darkColor);
+    darkPalette.setColor (QPalette::Disabled, QPalette::Text, QColor (127,127,127));
+    darkPalette.setColor (QPalette::Dark, QColor (35,35,35));
+    darkPalette.setColor (QPalette::Shadow, QColor (20,20,20));
+    darkPalette.setColor (QPalette::Button, QColor (53,53,53));
     darkPalette.setColor (QPalette::ButtonText, Qt::white);
-    darkPalette.setColor (QPalette::Disabled, QPalette::ButtonText, disabledColor);
+    darkPalette.setColor (QPalette::Disabled, QPalette::ButtonText, QColor (127,127,127));
     darkPalette.setColor (QPalette::BrightText, Qt::red);
-    darkPalette.setColor (QPalette::Link, QColor (42, 130, 218));
-
-    darkPalette.setColor (QPalette::Highlight, QColor (42, 130, 218));
-    darkPalette.setColor (QPalette::HighlightedText, Qt::black);
-    darkPalette.setColor (QPalette::Disabled, QPalette::HighlightedText, disabledColor);
-
-    darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
-    darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+    darkPalette.setColor (QPalette::Link, QColor (42,130,218));
+    darkPalette.setColor (QPalette::Highlight, QColor (42,130,218));
+    darkPalette.setColor (QPalette::Disabled, QPalette::Highlight, QColor (80,80,80));
+    darkPalette.setColor (QPalette::HighlightedText, Qt::white);
+    darkPalette.setColor (QPalette::Disabled, QPalette::HighlightedText, QColor (127,127,127));
 }
 
