@@ -7,7 +7,7 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QLabel>
-#include "DevicesComboBox.h"
+#include "CustomWidgets/DevicesComboBox.h"
 #include "RecordingsManagerWidget.h"
 
 #include <QGroupBox>

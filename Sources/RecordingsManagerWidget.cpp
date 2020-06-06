@@ -93,7 +93,7 @@ void RecordingsManagerWidget::initActions ()
     connect (bRemoveAllRecordings, SIGNAL (clicked ()), this, SLOT (deleteAllRecordings ()));
 
     connect (recordingsList, SIGNAL (itemDoubleClicked (QListWidgetItem*)), this, SLOT (play ()));
-    connect (recordingsList, SIGNAL (currentTextChanged (const QString&)), this, SLOT (activateUI (const QString&)));
+    connect (recordingsList, SIGNAL (currentTextChanged (const QString&)), this, SLOT (loadCurrentRecording (const QString&)));
 }
 
 
@@ -124,8 +124,9 @@ void RecordingsManagerWidget::initPlaybackTools ()
     bPlay->setShortcut (QKeySequence (Qt::Key_Space));
 
 
-    playbackBar = new QSlider (Qt::Horizontal);
+    playbackBar = new DirectJumpSlider;
     connect (playbackBar, SIGNAL (sliderPressed ()), this, SLOT (onPressedSlider ()));
+    connect (playbackBar, SIGNAL (directJumpOperated ()), this, SLOT (changePlayingOffset ()));
     connect (playbackBar, SIGNAL (valueChanged (int)), this, SLOT (onSliderValueChanged (int)));
     connect (playbackBar, SIGNAL (sliderReleased ()), this, SLOT (onReleasedSlider ()));
 
@@ -157,7 +158,7 @@ RecordingsManagerWidget::~RecordingsManagerWidget ()
 ////////////// UI update slots
 
 
-void RecordingsManagerWidget::activateUI (const QString& currentFileName)
+void RecordingsManagerWidget::loadCurrentRecording (const QString& currentFileName)
 {
     bProperties->setEnabled (true);
     bShowInExplorer->setEnabled (true);
@@ -253,6 +254,11 @@ void RecordingsManagerWidget::onSliderValueChanged (int value)
     playbackTimerLabel->setText (QString::number (minutes) + ":" + (seconds < 10 ? "0" : "") + QString::number (seconds));
 }
 
+void RecordingsManagerWidget::changePlayingOffset ()
+{
+    recording.setPlayingOffset (sf::milliseconds (playbackBar->value ()));
+}
+
 void RecordingsManagerWidget::onReleasedSlider ()
 {
     recording.setPlayingOffset (sf::milliseconds (playbackBar->value ()));
@@ -332,7 +338,7 @@ void RecordingsManagerWidget::displayProperties ()
     QString fileName (recordingsList->currentItem ()->text ());
 
     sf::Music music;
-    if (!music.openFromFile (fileName.toStdString ()))
+    if (!music.openFromFile (std::string (fileName.toLocal8Bit ())))
     {
         if (QMessageBox::question (this, tr("Ooooops..."), tr("Impossible to load this file,\nit must be corrupted !\nDo you want to delete it ?")) == QMessageBox::Yes)
         {
@@ -349,6 +355,7 @@ void RecordingsManagerWidget::displayProperties ()
                             tr("\n\nSample rate : ") + QString::number (music.getSampleRate ()) + " Hz" +
                             tr("\nChannels : ") + QString::number (music.getChannelCount ()) +
                             tr("\nSize : "));
+
 
 
         if (file.size () >= 1048576)
@@ -426,6 +433,7 @@ void RecordingsManagerWidget::rename ()
 
     bool ok;
     QString newFileName = QInputDialog::getText (this, tr("Rename file"), tr("Please input the new file name without suffix :"), QLineEdit::Normal, QFileInfo (fileName).baseName (), &ok);
+    newFileName = newFileName.remove (QRegExp ("^ +")).remove (QRegExp (" +$"));
 
     if (!ok)
         return;

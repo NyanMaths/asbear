@@ -227,7 +227,6 @@ void RecorderWidget::start ()
     {
         recorder->resume ();
 
-
         bStart->setText (tr("Start &recording"));
         mainWindow->setWindowTitle (tr("MRecorder - Recording..."));
 

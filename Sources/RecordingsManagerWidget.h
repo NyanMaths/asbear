@@ -4,9 +4,9 @@
 
 #include <QPushButton>
 #include <QListWidget>
-#include <QSlider>
-#include <QLabel>
 
+#include <QLabel>
+#include "CustomWidgets/DirectJumpSlider.h"
 #include <QGridLayout>
 
 #include <SFML/Audio.hpp>
@@ -33,7 +33,7 @@ class RecordingsManagerWidget : public QWidget
         void updateUI ();
         void updateSlider ();
 
-        void activateUI (const QString&);
+        void loadCurrentRecording (const QString&);
 
 
         void displayProperties ();
@@ -55,6 +55,7 @@ class RecordingsManagerWidget : public QWidget
 
         void onPressedSlider ();
         void onSliderValueChanged (int);
+        void changePlayingOffset ();
         void onReleasedSlider ();
 
 
@@ -87,7 +88,7 @@ class RecordingsManagerWidget : public QWidget
           QPushButton* bStop;
           QPushButton* bStepBack;
           QPushButton* bStepForward;
-          QSlider* playbackBar;
+          DirectJumpSlider* playbackBar;
           QLabel* playbackTimerLabel;
           QLabel* recordingDurationLabel;
 };
