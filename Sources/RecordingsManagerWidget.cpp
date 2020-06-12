@@ -1,9 +1,13 @@
 #include <fstream>
 #include <QFile>
+
 #include <QFileInfo>
 #include <QDateTime>
 #include <QDesktopServices>
+#include <QDropEvent>
+#include <QMimeData>
 
+#include "ConverterWidget.h"
 #include "RecordingsManagerWidget.h"
 
 #include <QMessageBox>
@@ -16,8 +20,12 @@
 ////////////// Initialize widget
 
 
-RecordingsManagerWidget::RecordingsManagerWidget () : QWidget ()
+RecordingsManagerWidget::RecordingsManagerWidget (QTabWidget* parent) : QWidget ()
 {
+    mainWindow = parent;
+
+    setAcceptDrops (true);
+
     layout = new QGridLayout (this);
 
 
@@ -42,32 +50,34 @@ RecordingsManagerWidget::RecordingsManagerWidget () : QWidget ()
     initPlaybackTools ();
 
 
-    layout->addWidget (recordingsList, 0, 0, 9, 1);
+    layout->addWidget (recordingsList, 0, 0, 10, 1);
 
-    layout->addWidget (bProperties, 0, 1);
-    layout->addWidget (bShowInExplorer, 1, 1);
-    layout->addWidget (bMove, 2, 1);
-    layout->addWidget (bRename, 3, 1);
-    layout->addWidget (bAddRecordings, 4, 1);
+    layout->addWidget (bAddRecordings, 0, 1);
+    layout->addWidget (bProperties, 1, 1);
+    layout->addWidget (bShowInExplorer, 2, 1);
+    layout->addWidget (bMove, 3, 1);
+    layout->addWidget (bRename, 4, 1);
     layout->addWidget (bRemoveFromList, 5, 1);
     layout->addWidget (bClearRecordingsList, 6, 1);
     layout->addWidget (bDeleteRecording, 7, 1);
     layout->addWidget (bRemoveAllRecordings, 8, 1);
+    layout->addWidget (bConvert, 9, 1);
 
-    layout->addWidget (playbackTools, 9, 0, 1, 2);
+    layout->addWidget (playbackTools, 10, 0, 1, 2);
 }
 
 void RecordingsManagerWidget::initActions ()
 {
+    bAddRecordings = new QPushButton (tr("&Add recordings"));
     bProperties = new QPushButton (tr("Pr&operties"));
     bShowInExplorer = new QPushButton (tr("Op&en folder"));
     bMove = new QPushButton (tr("&Move to..."));
     bRename = new QPushButton (tr("Re&name"));
-    bAddRecordings = new QPushButton (tr("&Add recordings"));
     bRemoveFromList = new QPushButton (tr("&Remove from list"));
     bClearRecordingsList = new QPushButton (tr("&Clear list"));
     bDeleteRecording = new QPushButton (tr("&Delete"));
     bRemoveAllRecordings = new QPushButton (tr("Delete a&ll"));
+    bConvert = new QPushButton (tr("Con&vert"));
 
     bProperties->setEnabled (false);
     bShowInExplorer->setEnabled (false);
@@ -75,6 +85,7 @@ void RecordingsManagerWidget::initActions ()
     bRename->setEnabled (false);
     bDeleteRecording->setEnabled (false);
     bRemoveFromList->setEnabled (false);
+    bConvert->setEnabled (false);
 
     if (recordingsList->count () == 0)
     {
@@ -82,15 +93,16 @@ void RecordingsManagerWidget::initActions ()
         bRemoveAllRecordings->setEnabled (false);
     }
 
+    connect (bAddRecordings, SIGNAL (clicked ()), this, SLOT (addRecordings ()));
     connect (bProperties, SIGNAL (clicked ()), this, SLOT (displayProperties ()));
     connect (bShowInExplorer, SIGNAL (clicked ()), this, SLOT (showInExplorer ()));
     connect (bMove, SIGNAL (clicked ()), this, SLOT (move ()));
     connect (bRename, SIGNAL (clicked ()), this, SLOT (rename ()));
-    connect (bAddRecordings, SIGNAL (clicked ()), this, SLOT (addRecordings ()));
     connect (bRemoveFromList, SIGNAL (clicked ()), this, SLOT (removeFromList ()));
     connect (bClearRecordingsList, SIGNAL (clicked ()), this, SLOT (clearRecordingsList ()));
     connect (bDeleteRecording, SIGNAL (clicked ()), this, SLOT (deleteRecording ()));
     connect (bRemoveAllRecordings, SIGNAL (clicked ()), this, SLOT (deleteAllRecordings ()));
+    connect (bConvert, SIGNAL (clicked ()), this, SLOT (convert ()));
 
     connect (recordingsList, SIGNAL (itemDoubleClicked (QListWidgetItem*)), this, SLOT (play ()));
     connect (recordingsList, SIGNAL (currentTextChanged (const QString&)), this, SLOT (loadCurrentRecording (const QString&)));
@@ -146,6 +158,12 @@ void RecordingsManagerWidget::initPlaybackTools ()
 }
 
 
+void RecordingsManagerWidget::setConverter (ConverterWidget* newConverter)
+{
+    converter = newConverter;
+}
+
+
 RecordingsManagerWidget::~RecordingsManagerWidget ()
 {
     std::ofstream recordingsFile ("Recordings.pastouche");
@@ -166,11 +184,13 @@ void RecordingsManagerWidget::loadCurrentRecording (const QString& currentFileNa
     bRename->setEnabled (true);
     bDeleteRecording->setEnabled (true);
     bRemoveFromList->setEnabled (true);
+    bConvert->setEnabled (true);
 
     playbackTools->setEnabled (true);
 
 
     recording.stop ();
+    playbackBar->setValue (0);
 
     if (!recording.openFromFile (std::string (currentFileName.toLocal8Bit ())) && !currentFileName.isEmpty ())
     {
@@ -185,7 +205,6 @@ void RecordingsManagerWidget::loadCurrentRecording (const QString& currentFileNa
         bPlay->setIcon (QIcon ("Start button.png"));
         bPlay->setToolTip (tr("Play"));
         playbackBar->setRange (0, recording.getDuration ().asMilliseconds ());
-        playbackTimerLabel->setText ("0:00");
 
         unsigned int minutes = recording.getDuration ().asMilliseconds () / 1000 / 60;
         unsigned int seconds = recording.getDuration ().asMilliseconds () / 1000 % 60;
@@ -206,6 +225,7 @@ void RecordingsManagerWidget::updateUI ()
         bRename->setEnabled (false);
         bDeleteRecording->setEnabled (false);
         bRemoveFromList->setEnabled (false);
+        bConvert->setEnabled (false);
 
         bClearRecordingsList->setEnabled (false);
         bRemoveAllRecordings->setEnabled (false);
@@ -522,7 +542,50 @@ void RecordingsManagerWidget::deleteAllRecordings ()
 }
 
 
+void RecordingsManagerWidget::convert ()
+{
+    converter->addFile (recordingsList->currentItem ()->text ());
+
+    mainWindow->setCurrentIndex (2);
+}
+
+
 ////////////// Others
+
+
+void RecordingsManagerWidget::dragEnterEvent (QDragEnterEvent* event)
+{
+    if (event->mimeData ()->hasUrls ())
+        event->acceptProposedAction ();
+
+    else
+        event->ignore ();
+}
+
+void RecordingsManagerWidget::dropEvent (QDropEvent* event)
+{
+    if (event->mimeData ()->hasUrls ())
+    {
+        QList<QUrl> droppedFiles (event->mimeData ()->urls ());
+        QString currentFile;
+
+        for (short int i = 0 ; i != droppedFiles.length () ; i++)
+        {
+            currentFile = droppedFiles.at (i).toString ().remove ("file:///");
+
+            if (QStringList ({"ogg", "flac", "wav"}).contains (QFileInfo (currentFile).suffix ().toLower ()))
+                addRecording (currentFile);
+
+            else
+                QMessageBox::warning (this, tr("Error"), tr("Impossible to import ") + currentFile + tr(",\nyou can only import OGG, FLAC and WAV files !"));
+        }
+
+        updateUI ();
+        event->acceptProposedAction ();
+    }
+    else
+        event->ignore ();
+}
 
 
 void RecordingsManagerWidget::addRecording (const QString& fileName)

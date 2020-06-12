@@ -15,7 +15,7 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 
-#include "AudioRecorder.h"
+#include "Tools/AudioRecorder.h"
 
 
 class RecorderWidget : public QWidget
@@ -23,7 +23,7 @@ class RecorderWidget : public QWidget
     Q_OBJECT
 
     public:
-        RecorderWidget (QWidget*, RecordingsManagerWidget*);
+        RecorderWidget (QTabWidget*, RecordingsManagerWidget*);
         ~RecorderWidget ();
 
         void beforeExit (QCloseEvent*);  // Prompt user to save before exit
@@ -50,7 +50,7 @@ class RecorderWidget : public QWidget
 
 
       RecordingsManagerWidget* recordingsTab;
-      QWidget* mainWindow;
+      QTabWidget* mainWindow;
 
       AudioRecorder* recorder;
       QTimer* timer;

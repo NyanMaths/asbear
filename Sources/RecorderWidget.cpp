@@ -11,7 +11,7 @@
 ////////////// Initialize widget
 
 
-RecorderWidget::RecorderWidget (QWidget* parent, RecordingsManagerWidget* displayTab) : QWidget ()
+RecorderWidget::RecorderWidget (QTabWidget* parent, RecordingsManagerWidget* displayTab) : QWidget ()
 {
     recordingsTab = displayTab;
     mainWindow = parent;
@@ -135,15 +135,21 @@ void RecorderWidget::initControlsBox ()
     bAbort->setEnabled (false);
 }
 
+
 void RecorderWidget::loadOptions ()
 {
     QStringList settings = {"0", "3", "1", "0"};
 
-    QFile optionsFile ("Recorder Options.pastouche");
 
-    if (optionsFile.open (QIODevice::ReadOnly | QIODevice::Text))
-        settings = QString (optionsFile.readAll ()).split ("\n");
+    QFile settingsFile ("Recorder Options.pastouche");
 
+    if (settingsFile.open (QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QStringList readSettings = QString (settingsFile.readAll ()).split ("\n");
+
+        if (readSettings.length () == settings.length ())
+            settings = readSettings;
+    }
 
     codecSelecter->setCurrentIndex (settings.at (0).toUShort ());
     rateSelecter->setCurrentIndex (settings.at (1).toUShort ());
@@ -151,17 +157,16 @@ void RecorderWidget::loadOptions ()
     advancedOptionsBox->setChecked (settings.at (3).toUShort ());
 }
 
-
 RecorderWidget::~RecorderWidget ()
 {
-    std::ofstream optionsFile ("Recorder Options.pastouche");
+    std::ofstream settingsFile ("Recorder Options.pastouche");
 
-    if (optionsFile)
+    if (settingsFile)
     {
-        optionsFile<<codecSelecter->currentIndex ()<<"\n"
-                   <<rateSelecter->currentIndex ()<<"\n"
-                   <<channelCountSelecter->currentIndex ()<<"\n"
-                   <<advancedOptionsBox->isChecked ();
+        settingsFile<<codecSelecter->currentIndex ()<<"\n"
+                    <<rateSelecter->currentIndex ()<<"\n"
+                    <<channelCountSelecter->currentIndex ()<<"\n"
+                    <<advancedOptionsBox->isChecked ();
     }
 }
 
@@ -262,6 +267,7 @@ void RecorderWidget::start ()
 
 
             mainWindow->setWindowTitle (tr("MRecorder - Recording..."));
+            mainWindow->setTabIcon (mainWindow->currentIndex (), QIcon ("Recorder Image.png"));
 
             bStart->setEnabled (false);
             bPause->setEnabled (true);
@@ -306,6 +312,7 @@ void RecorderWidget::stop ()
 
         bStart->setText (tr("Start &recording"));
         mainWindow->setWindowTitle (tr("MRecorder - Home"));
+        mainWindow->setTabIcon (mainWindow->currentIndex (), QIcon ());
 
         optionsBox->setEnabled (true);
 
@@ -341,6 +348,7 @@ void RecorderWidget::abort ()
 
         bStart->setText (tr("Start &recording"));
         mainWindow->setWindowTitle (tr("MRecorder - Home"));
+        mainWindow->setTabIcon (mainWindow->currentIndex (), QIcon ());
 
         optionsBox->setEnabled (true);
 

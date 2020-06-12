@@ -7,6 +7,7 @@
 #include <QTabWidget>
 #include "RecorderWidget.h"
 #include "RecordingsManagerWidget.h"
+#include "ConverterWidget.h"
 #include "OptionsWidget.h"
 
 
@@ -28,6 +29,8 @@ class Application : public QTabWidget
         RecorderWidget* recorderTab;
 
         RecordingsManagerWidget* recordingsTab;
+
+        ConverterWidget* converterTab;
 
         OptionsWidget* optionsTab;
 };

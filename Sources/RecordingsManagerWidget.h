@@ -13,16 +13,20 @@
 #include <QTimer>
 
 
+class ConverterWidget;
+
 class RecordingsManagerWidget : public QWidget
 {
     Q_OBJECT
 
     public:
-        RecordingsManagerWidget ();
+        RecordingsManagerWidget (QTabWidget*);
         ~RecordingsManagerWidget ();
 
         void addRecording (const QString&);
         void removeCurrentFromList ();
+
+        void setConverter (ConverterWidget*);
 
 
     signals:
@@ -47,6 +51,8 @@ class RecordingsManagerWidget : public QWidget
         void removeFromList ();
         void clearRecordingsList ();
 
+        void convert ();
+
 
         void play ();
         void stop ();
@@ -63,6 +69,12 @@ class RecordingsManagerWidget : public QWidget
         void initActions ();
         void initPlaybackTools ();
 
+        virtual void dragEnterEvent (QDragEnterEvent*);
+        virtual void dropEvent (QDropEvent*);
+
+
+        QTabWidget* mainWindow;
+        ConverterWidget* converter;
 
         QTimer* musicTimer;
         sf::Music recording;
@@ -72,15 +84,16 @@ class RecordingsManagerWidget : public QWidget
         QGridLayout* layout;
 
         QListWidget* recordingsList;
+          QPushButton* bAddRecordings;
           QPushButton* bProperties;
           QPushButton* bShowInExplorer;
           QPushButton* bMove;
           QPushButton* bRename;
-          QPushButton* bAddRecordings;
           QPushButton* bRemoveFromList;
           QPushButton* bClearRecordingsList;
           QPushButton* bDeleteRecording;
           QPushButton* bRemoveAllRecordings;
+          QPushButton* bConvert;
 
         QWidget* playbackTools;
         QHBoxLayout* playbackLayout;

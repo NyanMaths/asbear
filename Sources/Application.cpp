@@ -33,11 +33,15 @@ Application::Application () : QTabWidget ()
 
 
     optionsTab = new OptionsWidget;
-    recordingsTab = new RecordingsManagerWidget;
+    recordingsTab = new RecordingsManagerWidget (this);
+    converterTab = new ConverterWidget (recordingsTab);
     recorderTab = new RecorderWidget (this, recordingsTab);
+
+    recordingsTab->setConverter (converterTab);
 
     addTab (recorderTab, tr("Audio recorder"));
     addTab (recordingsTab, tr("Your recordings"));
+    addTab (converterTab, tr("File converter"));
     addTab (optionsTab, tr("About and settings"));
 
 

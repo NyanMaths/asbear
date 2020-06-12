@@ -70,11 +70,16 @@ void OptionsWidget::loadOptions ()
 {
     QStringList settings {"en", "English", "0"};
 
+
     QFile settingsFile ("UI Options.pastouche");
 
     if (settingsFile.open (QIODevice::ReadOnly | QIODevice::Text))
-        settings = QString (settingsFile.readAll ()).split ("\n");
+    {
+        QStringList readSettings = QString (settingsFile.readAll ()).split ("\n");
 
+        if (readSettings.length () == settings.length ())
+            settings = readSettings;
+    }
 
     languageSelecter->setCurrentText (settings.at (1));
     themeSelecter->setCurrentIndex (settings.at (2).toUShort ());

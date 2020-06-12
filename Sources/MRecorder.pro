@@ -6,22 +6,28 @@ CONFIG += c++17
 
 SOURCES += \
         Application.cpp \
+        ConverterWidget.cpp \
         OptionsWidget.cpp \
         RecorderWidget.cpp \
         RecordingsManagerWidget.cpp \
-        AudioRecorder.cpp \
         CustomWidgets/DirectJumpSlider.cpp \
         CustomWidgets/DevicesComboBox.cpp \
+        Tools/AudioRecorder.cpp \
+        Tools/Converter.cpp \
         main.cpp
+
 
 HEADERS += \
         Application.h \
+        ConverterWidget.h \
         OptionsWidget.h \
         RecorderWidget.h \
         RecordingsManagerWidget.h \
-        AudioRecorder.h \
         CustomWidgets/DirectJumpSlider.h \
-        CustomWidgets/DevicesComboBox.h
+        CustomWidgets/DevicesComboBox.h \
+        Tools/AudioRecorder.h \
+        Tools/Converter.h
+
 
 RC_FILE = resources.rc
 
