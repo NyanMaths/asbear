@@ -26,8 +26,8 @@ void DevicesComboBox::mousePressEvent (QMouseEvent* event)
 
     setCurrentText (currentDevice);
 
-    showPopup ();
 
+    showPopup ();
 
     event->accept ();
 }

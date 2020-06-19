@@ -8,6 +8,9 @@
 #include <QComboBox>
 #include <QLabel>
 #include "CustomWidgets/DevicesComboBox.h"
+#include "CustomWidgets/AudioLevelWidget.h"
+#include "CustomWidgets/SpectrumWidget.h"
+#include "CustomWidgets/DirectJumpSlider.h"
 #include "RecordingsManagerWidget.h"
 
 #include <QGroupBox>
@@ -26,7 +29,7 @@ class RecorderWidget : public QWidget
         RecorderWidget (QTabWidget*, RecordingsManagerWidget*);
         ~RecorderWidget ();
 
-        void beforeExit (QCloseEvent*);  // Prompt user to save before exit
+        bool beforeExit ();  // Prompt user to save before exit
 
 
     private slots:
@@ -34,6 +37,8 @@ class RecorderWidget : public QWidget
         void stop ();
         void pause ();
         void abort ();
+
+        void setVolume (int);
 
         void resetCaptureSettings ();
 
@@ -45,6 +50,7 @@ class RecorderWidget : public QWidget
 
       void initControlsBox ();
       void initOptionsBox ();
+      void initAdvancedOptionsBox ();
 
       void getFileInfos (unsigned int&, unsigned short int&);
 
@@ -64,8 +70,12 @@ class RecorderWidget : public QWidget
       QGroupBox* optionsBox;
       QGridLayout* optionsBoxLayout;
 
-        QLabel* chooseDeviceLabel;
-        QComboBox* deviceSelecter;
+      QLabel* chooseDeviceLabel;
+      QComboBox* deviceSelecter;
+
+      QLabel* chooseVolumeLabel;
+      DirectJumpSlider* volumeSelecter;
+      QLabel* overamplificationWarning;
 
         QGroupBox* advancedOptionsBox;
         QGridLayout* advancedOptionsBoxLayout;
@@ -83,10 +93,16 @@ class RecorderWidget : public QWidget
 
         QLabel* recorderImage;
 
-      QPushButton* bStart;
-      QPushButton* bStop;
-      QPushButton* bPause;
-      QPushButton* bAbort;
+      AudioLevelWidget* levelWidget;
+
+      QWidget* controlsWidget;
+      QHBoxLayout* controlsLayout;
+        QPushButton* bStart;
+        QPushButton* bStop;
+        QPushButton* bPause;
+        QPushButton* bAbort;
+
+      SpectrumWidget* spectrum;
 };
 
 

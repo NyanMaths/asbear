@@ -1,4 +1,5 @@
-#include <QCloseEvent>
+#include <QApplication>
+
 #include <QFile>
 #include <fstream>
 
@@ -31,34 +32,23 @@ RecorderWidget::RecorderWidget (QTabWidget* parent, RecordingsManagerWidget* dis
 
     initOptionsBox ();
 
-    optionsBoxLayout->addWidget (chooseDeviceLabel, 0, 0);
-    optionsBoxLayout->addWidget (deviceSelecter, 0, 1);
-
-    optionsBoxLayout->addWidget (advancedOptionsBox, 1, 0, 1, 2);
-
-    advancedOptionsBoxLayout->addWidget (chooseCodecLabel, 0, 0);
-    advancedOptionsBoxLayout->addWidget (codecSelecter, 0, 1);
-
-    advancedOptionsBoxLayout->addWidget (chooseRateLabel, 1, 0);
-    advancedOptionsBoxLayout->addWidget (rateSelecter, 1, 1);
-
-    advancedOptionsBoxLayout->addWidget (chooseChannelCountLabel, 2, 0);
-    advancedOptionsBoxLayout->addWidget (channelCountSelecter, 2, 1);
-
-    optionsBoxLayout->addWidget (bResetCaptureSettings, 2, 0);
-
-    optionsBoxLayout->addWidget (recorderImage, 1, 2);
-
 
     initControlsBox ();
 
 
-    layout->addWidget (optionsBox, 0, 0, 1, 4);
-    layout->addWidget (bStart, 1, 0);
-    layout->addWidget (bPause, 1, 1);
-    layout->addWidget (bStop, 1, 2);
-    layout->addWidget (bAbort, 1, 3);
-    layout->addWidget (timerLabel, 2, 0, 1, 4);
+    levelWidget = new AudioLevelWidget;
+    connect (recorder, SIGNAL (audioLevel (double)), levelWidget, SLOT (setLevel (double)));
+
+    spectrum = new SpectrumWidget;
+    connect (recorder, SIGNAL (audioLevel (double)), spectrum, SLOT (addLevel (double)));
+    connect (recorder, SIGNAL (started ()), spectrum, SLOT (clear ()));
+
+
+    layout->addWidget (optionsBox, 0, 0);
+    layout->addWidget (levelWidget, 0, 1);
+    layout->addWidget (controlsWidget, 1, 0, 1, 2);
+    layout->addWidget (timerLabel, 2, 0, 1, 2);
+    layout->addWidget (spectrum, 3, 0, 1, 2);
 
 
     loadOptions ();
@@ -73,7 +63,47 @@ void RecorderWidget::initOptionsBox ()
     chooseDeviceLabel = new QLabel (tr("Choose input device :"));
     deviceSelecter = new DevicesComboBox;
 
+    chooseVolumeLabel = new QLabel;
+    volumeSelecter = new DirectJumpSlider;
+    volumeSelecter->setRange (0, 400);
+    connect (volumeSelecter, SIGNAL (valueChanged (int)), this, SLOT (setVolume (int)));
 
+    overamplificationWarning = new QLabel (tr("Values higher than 100% may degrade quality !"));
+    overamplificationWarning->setStyleSheet("QLabel{ color : red; font-style : italic; font-size : 13px; }");
+
+
+    initAdvancedOptionsBox ();
+
+
+    bResetCaptureSettings = new QPushButton (tr("Reset capture settings"));
+    connect (bResetCaptureSettings, SIGNAL (clicked ()), this, SLOT (resetCaptureSettings ()));
+
+    recorderImage = new QLabel;
+    recorderImage->setPixmap (QPixmap ("Recorder Image.png"));
+
+
+    optionsBoxLayout->addWidget (chooseDeviceLabel, 0, 0);
+    optionsBoxLayout->addWidget (deviceSelecter, 0, 1);
+    optionsBoxLayout->addWidget (chooseVolumeLabel, 1, 0);
+    optionsBoxLayout->addWidget (volumeSelecter, 1, 1);
+    optionsBoxLayout->addWidget (overamplificationWarning, 2, 0, 1, 2);
+
+    optionsBoxLayout->addWidget (advancedOptionsBox, 3, 0, 1, 2);
+
+    advancedOptionsBoxLayout->addWidget (chooseCodecLabel, 0, 0);
+    advancedOptionsBoxLayout->addWidget (codecSelecter, 0, 1);
+    advancedOptionsBoxLayout->addWidget (chooseRateLabel, 1, 0);
+    advancedOptionsBoxLayout->addWidget (rateSelecter, 1, 1);
+    advancedOptionsBoxLayout->addWidget (chooseChannelCountLabel, 2, 0);
+    advancedOptionsBoxLayout->addWidget (channelCountSelecter, 2, 1);
+
+    optionsBoxLayout->addWidget (bResetCaptureSettings, 4, 0);
+
+    optionsBoxLayout->addWidget (recorderImage, 3, 2);
+}
+
+void RecorderWidget::initAdvancedOptionsBox ()
+{
     advancedOptionsBox = new QGroupBox (tr("Advanced coding options"));
     advancedOptionsBox->setCheckable (true);
     advancedOptionsBoxLayout = new QGridLayout (advancedOptionsBox);
@@ -107,17 +137,14 @@ void RecorderWidget::initOptionsBox ()
     channelCountSelecter = new QComboBox;
     channelCountSelecter->addItem ("Mono (1)", QVariant (1));
     channelCountSelecter->addItem (tr("Stereo (2)"), QVariant (2));
-
-
-    bResetCaptureSettings = new QPushButton (tr("Reset capture settings"));
-    connect (bResetCaptureSettings, SIGNAL (clicked ()), this, SLOT (resetCaptureSettings ()));
-
-    recorderImage = new QLabel;
-    recorderImage->setPixmap (QPixmap ("Recorder Image.png"));
 }
 
 void RecorderWidget::initControlsBox ()
 {
+    controlsWidget = new QWidget;
+    controlsLayout = new QHBoxLayout (controlsWidget);
+
+
     bStart = new QPushButton (QIcon ("Start button.png"), tr("Start &recording"));
     bPause = new QPushButton (QIcon ("Pause button.png"), tr("&Pause recording"));
     bStop = new QPushButton (QIcon ("Stop button.png"), tr("&Stop recording"));
@@ -133,12 +160,18 @@ void RecorderWidget::initControlsBox ()
     bPause->setEnabled (false);
     bStop->setEnabled (false);
     bAbort->setEnabled (false);
+
+
+    controlsLayout->addWidget (bStart);
+    controlsLayout->addWidget (bPause);
+    controlsLayout->addWidget (bStop);
+    controlsLayout->addWidget (bAbort);
 }
 
 
 void RecorderWidget::loadOptions ()
 {
-    QStringList settings = {"0", "3", "1", "0"};
+    QStringList settings = {"0", "3", "1", "0", "100"};
 
 
     QFile settingsFile ("Recorder Options.pastouche");
@@ -155,6 +188,9 @@ void RecorderWidget::loadOptions ()
     rateSelecter->setCurrentIndex (settings.at (1).toUShort ());
     channelCountSelecter->setCurrentIndex (settings.at (2).toUShort ());
     advancedOptionsBox->setChecked (settings.at (3).toUShort ());
+
+    volumeSelecter->setValue (settings.at (4).toUShort ());
+    setVolume (settings.at (4).toUShort ());
 }
 
 RecorderWidget::~RecorderWidget ()
@@ -166,7 +202,8 @@ RecorderWidget::~RecorderWidget ()
         settingsFile<<codecSelecter->currentIndex ()<<"\n"
                     <<rateSelecter->currentIndex ()<<"\n"
                     <<channelCountSelecter->currentIndex ()<<"\n"
-                    <<advancedOptionsBox->isChecked ();
+                    <<advancedOptionsBox->isChecked ()<<"\n"
+                    <<volumeSelecter->value ();
     }
 }
 
@@ -174,17 +211,26 @@ RecorderWidget::~RecorderWidget ()
 ////////////// Slots
 
 
+void RecorderWidget::setVolume (int newVolume)
+{
+    recorder->setVolume (newVolume);
+
+    chooseVolumeLabel->setText (tr("Input volume (") + QString::number (newVolume) + "%)");
+}
+
 void RecorderWidget::resetCaptureSettings ()
 {
     if (QMessageBox::question (this, tr("Confirmation"), tr("Do you really want to reset these setings ?")) == QMessageBox::Yes)
     {
         deviceSelecter->setCurrentText (QString::fromStdString (sf::SoundRecorder::getAvailableDevices ().at (0)));
 
+        volumeSelecter->setValue (100);
         codecSelecter->setCurrentIndex (0);
         rateSelecter->setCurrentIndex (3);
         channelCountSelecter->setCurrentIndex (1);
     }
 }
+
 
 void RecorderWidget::updateTimerLabel ()
 {
@@ -306,7 +352,6 @@ void RecorderWidget::stop ()
     {
         timer->stop ();
         recorder->stop ();
-        recorder->setOutputStream ("", 0, 0);
         recordingsTab->addRecording (outputFileName);
 
 
@@ -341,7 +386,6 @@ void RecorderWidget::abort ()
     {
         timer->stop ();
         recorder->stop ();
-        recorder->setOutputStream ("", 0, 0);
 
         QFile::remove (outputFileName);
 
@@ -368,11 +412,13 @@ void RecorderWidget::abort ()
 
 // If the user closed the app during recording, prompt him/her to save or abort
 
-void RecorderWidget::beforeExit (QCloseEvent* event)
+bool RecorderWidget::beforeExit ()
 {
     if (recorder->recording ())
     {
+        recorder->pause ();
         mainWindow->setWindowTitle (tr("MRecorder - Paused"));
+
         QMessageBox::StandardButton answer = QMessageBox::question (this, tr("Wait a second !"), tr("It seems you are still recording,\nDo you want to save before close ?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 
         if (answer == QMessageBox::Yes)
@@ -380,22 +426,24 @@ void RecorderWidget::beforeExit (QCloseEvent* event)
             recorder->stop ();
             recordingsTab->addRecording (outputFileName);
 
-            event->accept ();
+            return true;
         }
         else if (answer == QMessageBox::No)
         {
             recorder->stop ();
-            recorder->setOutputStream ("", 0, 0);
 
             QFile::remove (outputFileName);
 
-            event->accept ();
+            return true;
         }
         else
         {
             mainWindow->setWindowTitle (tr("MRecorder - Recording..."));
+            recorder->resume ();
 
-            event->ignore ();
+            return false;
         }
     }
+
+    return true;
 }

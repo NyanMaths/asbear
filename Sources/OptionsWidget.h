@@ -19,7 +19,6 @@ class OptionsWidget : public QWidget
 
     public:
         OptionsWidget ();
-
         ~OptionsWidget ();
 
 
@@ -30,6 +29,7 @@ class OptionsWidget : public QWidget
 
     private:
         void initPalettes ();
+        void initOptionsBox ();
 
         void loadOptions ();
 
@@ -45,10 +45,11 @@ class OptionsWidget : public QWidget
         QGroupBox* UIOptionsBox;
         QGridLayout* UIOptionsBoxLayout;
 
-        QLabel* chooseLanguageLabel;
-        QComboBox* languageSelecter;
-        QLabel* chooseThemeLabel;
-        QComboBox* themeSelecter;
+          QLabel* chooseLanguageLabel;
+          QComboBox* languageSelecter;
+
+          QLabel* chooseThemeLabel;
+          QComboBox* themeSelecter;
 
         QLabel* NY4N_M4THS;
 };

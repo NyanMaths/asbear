@@ -1,4 +1,5 @@
 #include <QProcess>
+#include <QThread>
 #include <QStyleFactory>
 
 #include <fstream>
@@ -28,6 +29,22 @@ OptionsWidget::OptionsWidget () : QWidget ()
     aboutLabel->setTextFormat (Qt::RichText);
 
 
+    initOptionsBox ();
+
+
+    NY4N_M4THS = new QLabel;
+    NY4N_M4THS->setPixmap (QPixmap ("NY4N_M4THS.png"));
+
+
+    layout->addWidget (aboutLabel, 0, 0, 1, 3);
+    layout->addWidget (NY4N_M4THS, 0, 3, Qt::AlignRight);
+    layout->addWidget (UIOptionsBox, 1, 0, 1, 2);
+
+    loadOptions ();
+}
+
+void OptionsWidget::initOptionsBox ()
+{
     UIOptionsBox = new QGroupBox (tr("UI options"));
     UIOptionsBoxLayout = new QGridLayout (UIOptionsBox);
     UIOptionsBoxLayout->setAlignment (Qt::AlignLeft);
@@ -52,17 +69,6 @@ OptionsWidget::OptionsWidget () : QWidget ()
     UIOptionsBoxLayout->addWidget (languageSelecter, 0, 1);
     UIOptionsBoxLayout->addWidget (chooseThemeLabel, 1, 0);
     UIOptionsBoxLayout->addWidget (themeSelecter, 1, 1);
-
-
-    NY4N_M4THS = new QLabel;
-    NY4N_M4THS->setPixmap (QPixmap ("NY4N_M4THS.png"));
-
-
-    layout->addWidget (aboutLabel, 0, 0, 1, 3);
-    layout->addWidget (NY4N_M4THS, 0, 3, Qt::AlignRight);
-    layout->addWidget (UIOptionsBox, 1, 0, 1, 2);
-
-    loadOptions ();
 }
 
 
@@ -123,7 +129,7 @@ void OptionsWidget::changeTheme (int themeIndex)
         qApp->setPalette (darkPalette);
     }
 
-    qApp->setFont (QFont ("Ubuntu", 12));
+    qApp->setFont (QFont ("Ubuntu"));
 }
 
 void OptionsWidget::promptToRestart ()

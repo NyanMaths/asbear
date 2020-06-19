@@ -10,7 +10,7 @@
 Application::Application () : QTabWidget ()
 {
     QFontDatabase::addApplicationFont ("Ubuntu.ttf");
-    qApp->setFont (QFont ("Ubuntu", 12));
+    qApp->setFont (QFont ("Ubuntu"));
 
 
     std::string lang ("en");
@@ -47,14 +47,18 @@ Application::Application () : QTabWidget ()
 
     show ();
 
+    setFixedSize (width (), height () + 100);
+
     QSize screenSize = QGuiApplication::screens ().at (0)->size ();
     move (screenSize.width () / 2 - width () / 2, screenSize.height () / 2 - height () / 2);
-
-    setFixedSize (size ());
 }
 
 
 void Application::closeEvent (QCloseEvent* event)
 {
-    recorderTab->beforeExit (event);
+    if (recorderTab->beforeExit ())
+        event->accept ();
+
+    else
+        event->ignore ();
 }

@@ -22,7 +22,7 @@ class Converter : public QThread
 
         void progress (unsigned short int);
 
-        void nextFileReached (const QString&);
+        void nextFile (const QString&);
         void finishedConverting (const QStringList&);
 
 

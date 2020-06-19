@@ -24,12 +24,18 @@ ConverterWidget::ConverterWidget (RecordingsManagerWidget* fileManagerTab) : QWi
     connect (converter, SIGNAL (duplicateFile (QString&, bool&)), this, SLOT (askForNewFileName (QString&, bool&)), Qt::BlockingQueuedConnection);
     connect (converter, SIGNAL (progress (unsigned short int)), this, SLOT (updateProgressBar (unsigned short int)), Qt::BlockingQueuedConnection);
     connect (converter, SIGNAL (finishedConverting (const QStringList&)), this, SLOT (reactivateUI (const QStringList&)));
-    connect (converter, SIGNAL (nextFileReached (const QString&)), this, SLOT (updateCurrentFileLabel (const QString&)));
+    connect (converter, SIGNAL (nextFile (const QString&)), this, SLOT (updateCurrentFileLabel (const QString&)));
 
     layout = new QVBoxLayout (this);
 
 
-    helpLabel = new QLabel (tr("You can easily convert your audio files thanks to this tool.\nSelect the files to convert or just drag and drop them to the window !"));
+    helpLabel = new QLabel (tr("You can easily convert your audio files thanks to this tool.\n"
+                               "Select the files to convert or just drag and drop them to the window !\n\n"
+                               "Pro tips :\n"
+                               "- Convert to OGG will reduce the file size (But with quality loss)\n"
+                               "- You should convert from WAV to FLAC in order to lighten them without quality loss\n"
+                               "- It's not a good idea to convert files to WAV, they will be uselessly heavied"));
+
     helpLabel->setAlignment (Qt::AlignCenter);
 
 
@@ -108,6 +114,17 @@ void ConverterWidget::initOptionsBox ()
     speedSelecter = new QSpinBox;
     speedSelecter->setMinimum (100);
     speedSelecter->setMaximum (10000);
+    speedSelecter->setSuffix (tr(" samples simultaneously"));
+
+    choosePriorityLabel = new QLabel (tr("Conversion priority :"));
+    prioritySelecter = new QComboBox;
+    prioritySelecter->addItem (tr("Very low"), 1);
+    prioritySelecter->addItem (tr("Low"), 2);
+    prioritySelecter->addItem (tr("Normal"), 3);
+    prioritySelecter->addItem (tr("High"), 4);
+    prioritySelecter->addItem (tr("Very high"), 5);
+    prioritySelecter->addItem (tr("Highest"), 6);
+    connect (prioritySelecter, SIGNAL (currentIndexChanged (int)), this, SLOT (changePriority ()));
 
     bResetSettings = new QPushButton (tr("Reset conversion settings"));
     connect (bResetSettings, SIGNAL (clicked ()), this, SLOT (resetSettings ()));
@@ -117,13 +134,15 @@ void ConverterWidget::initOptionsBox ()
     optionsBoxLayout->addWidget (codecSelecter, 0, 1);
     optionsBoxLayout->addWidget (chooseSpeedLabel, 1, 0);
     optionsBoxLayout->addWidget (speedSelecter, 1, 1);
-    optionsBoxLayout->addWidget (bResetSettings, 2, 0);
+    optionsBoxLayout->addWidget (choosePriorityLabel, 2, 0);
+    optionsBoxLayout->addWidget (prioritySelecter, 2, 1);
+    optionsBoxLayout->addWidget (bResetSettings, 3, 0);
 }
 
 
 void ConverterWidget::loadOptions ()
 {
-    QStringList settings = {"0", "1000"};
+    QStringList settings = {"0", "1000", "2"};
 
 
     QFile settingsFile ("Converter Options.pastouche");
@@ -137,7 +156,8 @@ void ConverterWidget::loadOptions ()
     }
 
     codecSelecter->setCurrentIndex (settings.at (0).toUShort ());
-    speedSelecter->setValue (settings.at (1).toUInt ());
+    speedSelecter->setValue (settings.at (1).toUShort ());
+    prioritySelecter->setCurrentIndex (settings.at (2).toUShort ());
 }
 
 ConverterWidget::~ConverterWidget ()
@@ -146,11 +166,18 @@ ConverterWidget::~ConverterWidget ()
 
     if (settingsFile)
         settingsFile<<codecSelecter->currentIndex ()<<"\n"
-                    <<speedSelecter->value ();
+                    <<speedSelecter->value ()<<"\n"
+                    <<prioritySelecter->currentIndex ();
 }
 
 
 ////////////// Slots
+
+
+void ConverterWidget::changePriority ()
+{
+    converter->setPriority (QThread::Priority (prioritySelecter->currentData ().toUInt ()));
+}
 
 
 void ConverterWidget::resetSettings ()
@@ -159,6 +186,7 @@ void ConverterWidget::resetSettings ()
     {
         codecSelecter->setCurrentIndex (0);
         speedSelecter->setValue (1000);
+        prioritySelecter->setCurrentIndex (2);
     }
 }
 

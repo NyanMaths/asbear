@@ -4,13 +4,16 @@
 
 #include <SFML/Audio.hpp>
 
+#include <QObject>
 
-class AudioRecorder : public sf::SoundRecorder
+
+class AudioRecorder : public QObject, public sf::SoundRecorder
 {
+    Q_OBJECT
+
     public:
         AudioRecorder ();
-
-        ~AudioRecorder ();
+        virtual ~AudioRecorder ();
 
 
         void pause ();
@@ -20,8 +23,15 @@ class AudioRecorder : public sf::SoundRecorder
         bool recording ();
 
         bool setOutputStream (std::string, unsigned int, unsigned int);
+        void setVolume (unsigned short int);
 
         unsigned int recordingTime ();
+
+
+    signals:
+        void started ();
+
+        void audioLevel (double);
 
 
     private:
@@ -29,13 +39,17 @@ class AudioRecorder : public sf::SoundRecorder
         virtual void onStop ();
         virtual bool onStart ();
 
+        unsigned short int computeLevel (const short int[], std::size_t);
+
 
         bool _paused;
         bool _recording;
 
         unsigned long long int _samplesCount;
+        unsigned short int _volume;
 
         sf::OutputSoundFile outputStream;
 };
+
 
 #endif // AUDIORECORDER_H

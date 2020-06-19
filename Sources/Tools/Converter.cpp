@@ -21,7 +21,7 @@ void Converter::run ()
 
     for (unsigned short int i = 0 ; i != files.length () ; i++)
     {
-        emit nextFileReached (files.at (i));
+        emit nextFile (files.at (i));
         emit progress (0);
 
         inputStream.openFromFile (std::string (files.at (i).toLocal8Bit ()));

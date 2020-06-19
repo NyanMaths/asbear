@@ -40,6 +40,7 @@ class ConverterWidget : public QWidget
         void updateCurrentFileLabel (const QString&);
         void updateProgressBar (unsigned short int);
 
+        void changePriority ();
         void resetSettings ();
 
 
@@ -77,6 +78,9 @@ class ConverterWidget : public QWidget
 
           QLabel* chooseSpeedLabel;
           QSpinBox* speedSelecter;
+
+          QLabel* choosePriorityLabel;
+          QComboBox* prioritySelecter;
 
           QPushButton* bResetSettings;
 

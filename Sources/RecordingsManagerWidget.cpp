@@ -27,7 +27,8 @@ RecordingsManagerWidget::RecordingsManagerWidget (QTabWidget* parent) : QWidget 
     setAcceptDrops (true);
 
     layout = new QGridLayout (this);
-
+    layout->setAlignment (Qt::AlignBottom);
+    layout->setSpacing (20);
 
     recordingsList = new QListWidget;
     recordingsList->setSortingEnabled (true);
@@ -375,7 +376,6 @@ void RecordingsManagerWidget::displayProperties ()
                             tr("\n\nSample rate : ") + QString::number (music.getSampleRate ()) + " Hz" +
                             tr("\nChannels : ") + QString::number (music.getChannelCount ()) +
                             tr("\nSize : "));
-
 
 
         if (file.size () >= 1048576)

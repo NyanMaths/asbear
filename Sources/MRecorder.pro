@@ -6,10 +6,12 @@ CONFIG += c++17
 
 SOURCES += \
         Application.cpp \
-        ConverterWidget.cpp \
-        OptionsWidget.cpp \
         RecorderWidget.cpp \
         RecordingsManagerWidget.cpp \
+        ConverterWidget.cpp \
+        OptionsWidget.cpp \
+        CustomWidgets/AudioLevelWidget.cpp \
+        CustomWidgets/SpectrumWidget.cpp \
         CustomWidgets/DirectJumpSlider.cpp \
         CustomWidgets/DevicesComboBox.cpp \
         Tools/AudioRecorder.cpp \
@@ -19,10 +21,12 @@ SOURCES += \
 
 HEADERS += \
         Application.h \
-        ConverterWidget.h \
-        OptionsWidget.h \
         RecorderWidget.h \
         RecordingsManagerWidget.h \
+        ConverterWidget.h \
+        OptionsWidget.h \
+        CustomWidgets/AudioLevelWidget.h \
+        CustomWidgets/SpectrumWidget.h \
         CustomWidgets/DirectJumpSlider.h \
         CustomWidgets/DevicesComboBox.h \
         Tools/AudioRecorder.h \
