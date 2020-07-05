@@ -79,7 +79,7 @@ bool AudioRecorder::recording ()
     return _recording;
 }
 
-unsigned int AudioRecorder::recordingTime ()
+unsigned int AudioRecorder::durationAsMilliseconds ()
 {
     return _samplesCount / getSampleRate () / getChannelCount ();
 }

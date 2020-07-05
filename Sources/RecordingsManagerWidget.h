@@ -83,6 +83,8 @@ class RecordingsManagerWidget : public QWidget
 
         QGridLayout* layout;
 
+        QLabel* helpLabel;
+
         QListWidget* recordingsList;
           QPushButton* bAddRecordings;
           QPushButton* bProperties;

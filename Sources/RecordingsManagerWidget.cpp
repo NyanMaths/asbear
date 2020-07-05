@@ -30,6 +30,12 @@ RecordingsManagerWidget::RecordingsManagerWidget (QTabWidget* parent) : QWidget 
     layout->setAlignment (Qt::AlignBottom);
     layout->setSpacing (20);
 
+    helpLabel = new QLabel (tr(
+        "This is your recording manager : all your recordings are listed here !\n"
+        "You can easily play, delete, move them from this tab\n"
+        "and add new recordings by drag and drop from your file explorer or using button \"Add recordings\"."));
+    helpLabel->setAlignment (Qt::AlignCenter);
+
     recordingsList = new QListWidget;
     recordingsList->setSortingEnabled (true);
 
@@ -51,20 +57,21 @@ RecordingsManagerWidget::RecordingsManagerWidget (QTabWidget* parent) : QWidget 
     initPlaybackTools ();
 
 
-    layout->addWidget (recordingsList, 0, 0, 10, 1);
+    layout->addWidget (helpLabel, 0, 0, 1, 2);
+    layout->addWidget (recordingsList, 1, 0, 10, 1);
 
-    layout->addWidget (bAddRecordings, 0, 1);
-    layout->addWidget (bProperties, 1, 1);
-    layout->addWidget (bShowInExplorer, 2, 1);
-    layout->addWidget (bMove, 3, 1);
-    layout->addWidget (bRename, 4, 1);
-    layout->addWidget (bRemoveFromList, 5, 1);
-    layout->addWidget (bClearRecordingsList, 6, 1);
-    layout->addWidget (bDeleteRecording, 7, 1);
-    layout->addWidget (bRemoveAllRecordings, 8, 1);
-    layout->addWidget (bConvert, 9, 1);
+    layout->addWidget (bAddRecordings, 1, 1);
+    layout->addWidget (bProperties, 2, 1);
+    layout->addWidget (bShowInExplorer, 3, 1);
+    layout->addWidget (bMove, 4, 1);
+    layout->addWidget (bRename, 5, 1);
+    layout->addWidget (bRemoveFromList, 6, 1);
+    layout->addWidget (bClearRecordingsList, 7, 1);
+    layout->addWidget (bDeleteRecording, 8, 1);
+    layout->addWidget (bRemoveAllRecordings, 9, 1);
+    layout->addWidget (bConvert, 10, 1);
 
-    layout->addWidget (playbackTools, 10, 0, 1, 2);
+    layout->addWidget (playbackTools, 11, 0, 1, 2);
 }
 
 void RecordingsManagerWidget::initActions ()

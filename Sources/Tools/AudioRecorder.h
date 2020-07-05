@@ -25,7 +25,7 @@ class AudioRecorder : public QObject, public sf::SoundRecorder
         bool setOutputStream (std::string, unsigned int, unsigned int);
         void setVolume (unsigned short int);
 
-        unsigned int recordingTime ();
+        unsigned int durationAsMilliseconds ();
 
 
     signals:

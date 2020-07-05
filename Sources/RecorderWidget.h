@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QLabel>
+#include <QCheckBox>
 #include "CustomWidgets/DevicesComboBox.h"
 #include "CustomWidgets/AudioLevelWidget.h"
 #include "CustomWidgets/SpectrumWidget.h"
@@ -14,8 +15,6 @@
 #include "RecordingsManagerWidget.h"
 
 #include <QGroupBox>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QGridLayout>
 
 #include "Tools/AudioRecorder.h"
@@ -38,6 +37,8 @@ class RecorderWidget : public QWidget
         void pause ();
         void abort ();
 
+        void changeDefaultDir ();
+
         void setVolume (int);
 
         void resetCaptureSettings ();
@@ -48,11 +49,12 @@ class RecorderWidget : public QWidget
     private:
       void loadOptions ();
 
-      void initControlsBox ();
       void initOptionsBox ();
+      void initFilesOptionsBox ();
       void initAdvancedOptionsBox ();
+      void initControlsBox ();
 
-      void getFileInfos (unsigned int&, unsigned short int&);
+      bool getFileInfos (unsigned int&, unsigned short int&);
 
 
       RecordingsManagerWidget* recordingsTab;
@@ -63,19 +65,22 @@ class RecorderWidget : public QWidget
       QLabel* timerLabel;
 
       QString outputFileName;
-
+      QString defaultDir;
 
       QGridLayout* layout;
+
 
       QGroupBox* optionsBox;
       QGridLayout* optionsBoxLayout;
 
-      QLabel* chooseDeviceLabel;
-      QComboBox* deviceSelecter;
+        QLabel* chooseDeviceLabel;
+        QComboBox* deviceSelecter;
 
-      QLabel* chooseVolumeLabel;
-      DirectJumpSlider* volumeSelecter;
-      QLabel* overamplificationWarning;
+        QLabel* chooseVolumeLabel;
+        DirectJumpSlider* volumeSelecter;
+        QLabel* overamplificationWarning;
+
+        QLabel* recorderImage;
 
         QGroupBox* advancedOptionsBox;
         QGridLayout* advancedOptionsBoxLayout;
@@ -91,9 +96,13 @@ class RecorderWidget : public QWidget
 
         QPushButton* bResetCaptureSettings;
 
-        QLabel* recorderImage;
-
       AudioLevelWidget* levelWidget;
+
+      QWidget* filesOptionsWidget;
+      QGridLayout* filesOptionsWidgetLayout;
+        QLabel* defaultDirLabel;
+        QPushButton* bChooseDefaultDir;
+        QCheckBox* autoNameRecordings;
 
       QWidget* controlsWidget;
       QHBoxLayout* controlsLayout;

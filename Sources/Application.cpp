@@ -40,17 +40,17 @@ Application::Application () : QTabWidget ()
     recordingsTab->setConverter (converterTab);
 
     addTab (recorderTab, tr("Audio recorder"));
-    addTab (recordingsTab, tr("Your recordings"));
+    addTab (recordingsTab, tr("My recordings"));
     addTab (converterTab, tr("File converter"));
     addTab (optionsTab, tr("About and settings"));
 
 
     show ();
 
-    setFixedSize (width (), height () + 100);
+    setFixedSize (width (), height () + 200);
 
     QSize screenSize = QGuiApplication::screens ().at (0)->size ();
-    move (screenSize.width () / 2 - width () / 2, screenSize.height () / 2 - height () / 2);
+    move (screenSize.width () / 2 - width () / 2, screenSize.height () / 2 - height () / 2 - 20);
 }
 
 

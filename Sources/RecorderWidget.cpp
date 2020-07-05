@@ -1,7 +1,9 @@
 #include <QApplication>
+#include <QDateTime>
 
 #include <QFile>
 #include <fstream>
+#include <QStandardPaths>
 
 #include <QMessageBox>
 #include <QFileDialog>
@@ -46,9 +48,10 @@ RecorderWidget::RecorderWidget (QTabWidget* parent, RecordingsManagerWidget* dis
 
     layout->addWidget (optionsBox, 0, 0);
     layout->addWidget (levelWidget, 0, 1);
-    layout->addWidget (controlsWidget, 1, 0, 1, 2);
-    layout->addWidget (timerLabel, 2, 0, 1, 2);
-    layout->addWidget (spectrum, 3, 0, 1, 2);
+    layout->addWidget (filesOptionsWidget, 1, 0, 1, 2);
+    layout->addWidget (controlsWidget, 2, 0, 1, 2);
+    layout->addWidget (timerLabel, 3, 0, 1, 2);
+    layout->addWidget (spectrum, 4, 0, 1, 2);
 
 
     loadOptions ();
@@ -60,7 +63,9 @@ void RecorderWidget::initOptionsBox ()
     optionsBoxLayout = new QGridLayout (optionsBox);
     optionsBoxLayout->setSpacing (15);
 
-    chooseDeviceLabel = new QLabel (tr("Choose input device :"));
+    initFilesOptionsBox ();
+
+    chooseDeviceLabel = new QLabel (tr("Choose microphone :"));
     deviceSelecter = new DevicesComboBox;
 
     chooseVolumeLabel = new QLabel;
@@ -82,13 +87,13 @@ void RecorderWidget::initOptionsBox ()
     recorderImage->setPixmap (QPixmap ("Recorder Image.png"));
 
 
-    optionsBoxLayout->addWidget (chooseDeviceLabel, 0, 0);
-    optionsBoxLayout->addWidget (deviceSelecter, 0, 1);
-    optionsBoxLayout->addWidget (chooseVolumeLabel, 1, 0);
-    optionsBoxLayout->addWidget (volumeSelecter, 1, 1);
-    optionsBoxLayout->addWidget (overamplificationWarning, 2, 0, 1, 2);
+    optionsBoxLayout->addWidget (chooseDeviceLabel, 1, 0);
+    optionsBoxLayout->addWidget (deviceSelecter, 1, 1);
+    optionsBoxLayout->addWidget (chooseVolumeLabel, 2, 0);
+    optionsBoxLayout->addWidget (volumeSelecter, 2, 1);
+    optionsBoxLayout->addWidget (overamplificationWarning, 3, 0, 1, 2);
 
-    optionsBoxLayout->addWidget (advancedOptionsBox, 3, 0, 1, 2);
+    optionsBoxLayout->addWidget (advancedOptionsBox, 4, 0, 1, 2);
 
     advancedOptionsBoxLayout->addWidget (chooseCodecLabel, 0, 0);
     advancedOptionsBoxLayout->addWidget (codecSelecter, 0, 1);
@@ -97,9 +102,27 @@ void RecorderWidget::initOptionsBox ()
     advancedOptionsBoxLayout->addWidget (chooseChannelCountLabel, 2, 0);
     advancedOptionsBoxLayout->addWidget (channelCountSelecter, 2, 1);
 
-    optionsBoxLayout->addWidget (bResetCaptureSettings, 4, 0);
+    optionsBoxLayout->addWidget (bResetCaptureSettings, 5, 0);
 
-    optionsBoxLayout->addWidget (recorderImage, 3, 2);
+    optionsBoxLayout->addWidget (recorderImage, 4, 2);
+}
+
+void RecorderWidget::initFilesOptionsBox ()
+{
+    filesOptionsWidget = new QWidget;
+    filesOptionsWidgetLayout = new QGridLayout (filesOptionsWidget);
+
+
+    defaultDirLabel = new QLabel;
+    bChooseDefaultDir = new QPushButton (tr("Change"));
+    connect (bChooseDefaultDir, SIGNAL (clicked ()), this, SLOT (changeDefaultDir ()));
+
+    autoNameRecordings = new QCheckBox (tr("Give a default name to the recordings (date and time)"));
+
+
+    filesOptionsWidgetLayout->addWidget (defaultDirLabel, 0, 0);
+    filesOptionsWidgetLayout->addWidget (bChooseDefaultDir, 0, 1);
+    filesOptionsWidgetLayout->addWidget (autoNameRecordings, 1, 0, 1, 2);
 }
 
 void RecorderWidget::initAdvancedOptionsBox ()
@@ -171,7 +194,7 @@ void RecorderWidget::initControlsBox ()
 
 void RecorderWidget::loadOptions ()
 {
-    QStringList settings = {"0", "3", "1", "0", "100"};
+    QStringList settings = {"0", "3", "1", "0", "100", "Invalid folder", "1"};
 
 
     QFile settingsFile ("Recorder Options.pastouche");
@@ -184,6 +207,14 @@ void RecorderWidget::loadOptions ()
             settings = readSettings;
     }
 
+
+    if (!QFile::exists (settings.at (5)))
+        settings[5] = QStandardPaths::standardLocations (QStandardPaths::DocumentsLocation).at (0);
+
+    defaultDir = settings.at (5);
+    defaultDirLabel->setText (tr("Default directory : ") + defaultDir);
+
+    autoNameRecordings->setChecked (settings.at (6).toUShort ());
     codecSelecter->setCurrentIndex (settings.at (0).toUShort ());
     rateSelecter->setCurrentIndex (settings.at (1).toUShort ());
     channelCountSelecter->setCurrentIndex (settings.at (2).toUShort ());
@@ -203,13 +234,26 @@ RecorderWidget::~RecorderWidget ()
                     <<rateSelecter->currentIndex ()<<"\n"
                     <<channelCountSelecter->currentIndex ()<<"\n"
                     <<advancedOptionsBox->isChecked ()<<"\n"
-                    <<volumeSelecter->value ();
+                    <<volumeSelecter->value ()<<"\n"
+                    <<defaultDir.toStdString ()<<"\n"
+                    <<autoNameRecordings->isChecked ();
     }
 }
 
 
 ////////////// Slots
 
+
+void RecorderWidget::changeDefaultDir ()
+{
+    QString newDir = QFileDialog::getExistingDirectory (this, tr("Choose the new recordings directory"), "", QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog);
+
+    if (!newDir.isEmpty ())
+    {
+        defaultDir = newDir;
+        defaultDirLabel->setText (tr("Default directory : ") + newDir);
+    }
+}
 
 void RecorderWidget::setVolume (int newVolume)
 {
@@ -234,7 +278,7 @@ void RecorderWidget::resetCaptureSettings ()
 
 void RecorderWidget::updateTimerLabel ()
 {
-    unsigned int seconds = recorder->recordingTime ();
+    unsigned int seconds = recorder->durationAsMilliseconds ();
     unsigned int minutes = seconds / 60;
     seconds %= 60;
 
@@ -250,7 +294,7 @@ void RecorderWidget::updateTimerLabel ()
 }
 
 
-void RecorderWidget::getFileInfos (unsigned int& sampleRate, unsigned short int& channelCount)
+bool RecorderWidget::getFileInfos (unsigned int& sampleRate, unsigned short int& channelCount)
 {
     QString codec ("ogg");
 
@@ -261,15 +305,32 @@ void RecorderWidget::getFileInfos (unsigned int& sampleRate, unsigned short int&
         channelCount = channelCountSelecter->currentData ().toUInt ();
     }
 
+    if (autoNameRecordings->isChecked ())
+        outputFileName = defaultDir + "/" + QDateTime::currentDateTime ().toString ().replace (":", ".");
 
-    outputFileName = QFileDialog::getSaveFileName (this, tr("Choose output file"), "", tr("Audio files (*.") + codec + ")", nullptr, QFileDialog::DontConfirmOverwrite | QFileDialog::DontUseNativeDialog);
+    else
+        outputFileName = QFileDialog::getSaveFileName (this, tr("Choose output file"), defaultDir, tr("Audio files (*.") + codec + ")", nullptr, QFileDialog::DontConfirmOverwrite | QFileDialog::DontUseNativeDialog);
+
 
     if (outputFileName.isEmpty ())
-        return;
-
+        return false;
 
     if (!outputFileName.contains (QRegExp ("\\." + codec + "$", Qt::CaseInsensitive)))
         outputFileName += "." + codec;
+
+
+    if (QFile::exists (outputFileName))
+    {
+        if (QMessageBox::question (this, tr("Wait a second !"), tr("This file already exists,\nDo you want to replace it ?")) == QMessageBox::No)
+        {
+            mainWindow->setWindowTitle (tr("MRecorder - Home"));
+            return false;
+        }
+        else
+            recordingsTab->removeCurrentFromList ();
+    }
+
+    return true;
 }
 
 void RecorderWidget::start ()
@@ -277,6 +338,7 @@ void RecorderWidget::start ()
     if (recorder->paused ())
     {
         recorder->resume ();
+        timer->start (100);
 
         bStart->setText (tr("Start &recording"));
         mainWindow->setWindowTitle (tr("MRecorder - Recording..."));
@@ -291,19 +353,9 @@ void RecorderWidget::start ()
 
         unsigned int sampleRate = 44100;
         unsigned short int channelCount = 2;
-        getFileInfos (sampleRate, channelCount);
 
-        if (!outputFileName.isEmpty ())
+        if (getFileInfos (sampleRate, channelCount))
         {
-            if (QFile::exists (outputFileName))
-            {
-                if (QMessageBox::question (this, tr("Wait a second !"), tr("This file already exists,\nDo you want to replace it ?")) == QMessageBox::No)
-                {
-                    mainWindow->setWindowTitle (tr("MRecorder - Home"));
-                    return;
-                }
-            }
-
             recorder->setOutputStream (std::string (outputFileName.toLocal8Bit ()), sampleRate, channelCount);
             recorder->setDevice (deviceSelecter->currentText ().toStdString ());
             recorder->setChannelCount (channelCount);
@@ -331,6 +383,7 @@ void RecorderWidget::start ()
 void RecorderWidget::pause ()
 {
     recorder->pause ();
+    timer->stop ();
 
 
     bStart->setText (tr("&Resume recording"));
