@@ -50,7 +50,6 @@ void AudioRecorder::onStop ()  // Called if the user want to stop recording
     _paused = false;
 
     emit audioLevel (0);
-
     outputStream.openFromFile ("", 0, 0);
 }
 
@@ -112,13 +111,13 @@ bool AudioRecorder::onProcessSamples (const sf::Int16* samples, std::size_t samp
 
             outputStream.write (amplifiedSamples, samplesCount);
 
-            emit audioLevel (computeLevel (amplifiedSamples, samplesCount) / 32767.0);
+            emit audioLevel (computeLevel (amplifiedSamples, samplesCount));
         }
         else
         {
             outputStream.write (samples, samplesCount);
 
-            emit audioLevel (computeLevel (samples, samplesCount) / 32767.0);
+            emit audioLevel (computeLevel (samples, samplesCount));
         }
 
         _samplesCount += samplesCount;
@@ -128,7 +127,7 @@ bool AudioRecorder::onProcessSamples (const sf::Int16* samples, std::size_t samp
 }
 
 
-unsigned short int AudioRecorder::computeLevel (const short int samples[], std::size_t samplesCount)
+double AudioRecorder::computeLevel (const short int samples[], std::size_t samplesCount)
 {
     unsigned long long int level = 0;
 
@@ -136,6 +135,6 @@ unsigned short int AudioRecorder::computeLevel (const short int samples[], std::
         level += abs (samples[i]);
 
 
-    return level / samplesCount;
+    return level / samplesCount / 32767.0;
 }
 

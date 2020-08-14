@@ -39,7 +39,7 @@ class AudioRecorder : public QObject, public sf::SoundRecorder
         virtual void onStop ();
         virtual bool onStart ();
 
-        unsigned short int computeLevel (const short int[], std::size_t);
+        double computeLevel (const short int[], std::size_t);
 
 
         bool _paused;

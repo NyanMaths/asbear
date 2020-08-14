@@ -195,21 +195,20 @@ void RecordingsManagerWidget::loadCurrentRecording (const QString& currentFileNa
     bConvert->setEnabled (true);
 
     playbackTools->setEnabled (true);
-
-
-    recording.stop ();
+    bStop->setEnabled (false);
+    bStepBack->setEnabled (false);
     playbackBar->setValue (0);
 
-    if (!recording.openFromFile (std::string (currentFileName.toLocal8Bit ())) && !currentFileName.isEmpty ())
+
+    if (currentFileName.isEmpty ())
+        recordingDurationLabel->setText ("0:00");
+
+    else if (recording.openFromFile (std::string (currentFileName.toLocal8Bit ())))
     {
-        if (QMessageBox::question (this, tr("Missing file"), tr("This file doesn't exists anymore,\ndo you want to remove it from the list ?")) == QMessageBox::Yes)
-        {
-            QFile::remove (currentFileName);
-            removeCurrentFromList ();
-        }
-    }
-    else if (!currentFileName.isEmpty ())
-    {
+        recording.play ();
+        recording.pause ();
+        recording.setPlayingOffset (sf::Time::Zero);
+
         bPlay->setIcon (QIcon ("Start button.png"));
         bPlay->setToolTip (tr("Play"));
         playbackBar->setRange (0, recording.getDuration ().asMilliseconds ());
@@ -220,7 +219,13 @@ void RecordingsManagerWidget::loadCurrentRecording (const QString& currentFileNa
         recordingDurationLabel->setText (QString::number (minutes) + ":" + (seconds < 10 ? "0" : "") + QString::number (seconds));
     }
     else
-        recordingDurationLabel->setText ("0:00");
+    {
+        if (QMessageBox::question (this, tr("Missing file"), tr("This file doesn't exists anymore,\ndo you want to remove it from the list ?")) == QMessageBox::Yes)
+        {
+            QFile::remove (currentFileName);
+            removeCurrentFromList ();
+        }
+    }
 }
 
 void RecordingsManagerWidget::updateUI ()
@@ -294,7 +299,7 @@ void RecordingsManagerWidget::onReleasedSlider ()
     if (oldStatus == sf::SoundSource::Playing)
     {
         recording.play ();
-        musicTimer->start (recording.getDuration ().asSeconds ());
+        musicTimer->start (20);
     }
 }
 
@@ -313,22 +318,25 @@ void RecordingsManagerWidget::play ()
     {
         bPlay->setIcon (QIcon ("Pause button.png"));
         bPlay->setToolTip (tr("Pause"));
+        bStop->setEnabled (true);
+        bStepBack->setEnabled (true);
 
         recording.play ();
-        musicTimer->start (recording.getDuration ().asSeconds ());
+        musicTimer->start (20);
     }
 }
 
 void RecordingsManagerWidget::stop ()
 {
     musicTimer->stop ();
-    recording.play ();
     recording.pause ();
     recording.setPlayingOffset (sf::seconds (0));
 
     playbackBar->setValue (0);
     bPlay->setIcon (QIcon ("Start button.png"));
     bPlay->setToolTip (tr("Play"));
+    bStop->setEnabled (false);
+    bStepBack->setEnabled (false);
 }
 
 void RecordingsManagerWidget::stepBack ()
@@ -339,7 +347,7 @@ void RecordingsManagerWidget::stepBack ()
         recording.setPlayingOffset (recording.getPlayingOffset () - step);
 
     else
-        recording.setPlayingOffset (sf::milliseconds (0));
+        stop ();
 
     updateSlider ();
 }
@@ -349,8 +357,11 @@ void RecordingsManagerWidget::stepForward ()
     sf::Time step (sf::milliseconds (recording.getDuration ().asMilliseconds () / 100));
 
     if (recording.getDuration () > recording.getPlayingOffset () + step)
+    {
         recording.setPlayingOffset (recording.getPlayingOffset () + step);
-
+        bStop->setEnabled (true);
+        bStepBack->setEnabled (true);
+    }
     else
         stop ();
 

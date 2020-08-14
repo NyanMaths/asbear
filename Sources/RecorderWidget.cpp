@@ -73,7 +73,7 @@ void RecorderWidget::initOptionsBox ()
     volumeSelecter->setRange (0, 400);
     connect (volumeSelecter, SIGNAL (valueChanged (int)), this, SLOT (setVolume (int)));
 
-    overamplificationWarning = new QLabel (tr("Values higher than 100% may degrade quality !"));
+    overamplificationWarning = new QLabel (tr("Values higher than 100% may degrade quality ! You don't need to change it if you have an ACG microphone."));
     overamplificationWarning->setStyleSheet("QLabel{ color : red; font-style : italic; font-size : 13px; }");
 
 
@@ -91,7 +91,7 @@ void RecorderWidget::initOptionsBox ()
     optionsBoxLayout->addWidget (deviceSelecter, 1, 1);
     optionsBoxLayout->addWidget (chooseVolumeLabel, 2, 0);
     optionsBoxLayout->addWidget (volumeSelecter, 2, 1);
-    optionsBoxLayout->addWidget (overamplificationWarning, 3, 0, 1, 2);
+    optionsBoxLayout->addWidget (overamplificationWarning, 3, 0, 1, 3);
 
     optionsBoxLayout->addWidget (advancedOptionsBox, 4, 0, 1, 2);
 
@@ -323,7 +323,7 @@ bool RecorderWidget::getFileInfos (unsigned int& sampleRate, unsigned short int&
     {
         if (QMessageBox::question (this, tr("Wait a second !"), tr("This file already exists,\nDo you want to replace it ?")) == QMessageBox::No)
         {
-            mainWindow->setWindowTitle (tr("MRecorder - Home"));
+            mainWindow->setWindowIcon (QIcon ("Window Icon.png"));
             return false;
         }
         else
@@ -341,16 +341,13 @@ void RecorderWidget::start ()
         timer->start (100);
 
         bStart->setText (tr("Start &recording"));
-        mainWindow->setWindowTitle (tr("MRecorder - Recording..."));
+        mainWindow->setWindowIcon (QIcon ("Recording.png"));
 
         bStart->setEnabled (false);
         bPause->setEnabled (true);
     }
     else
     {
-        mainWindow->setWindowTitle (tr("MRecorder - Start recording ?"));
-
-
         unsigned int sampleRate = 44100;
         unsigned short int channelCount = 2;
 
@@ -364,8 +361,7 @@ void RecorderWidget::start ()
             timer->start (100);
 
 
-            mainWindow->setWindowTitle (tr("MRecorder - Recording..."));
-            mainWindow->setTabIcon (mainWindow->currentIndex (), QIcon ("Recorder Image.png"));
+            mainWindow->setWindowIcon (QIcon ("Recording.png"));
 
             bStart->setEnabled (false);
             bPause->setEnabled (true);
@@ -374,8 +370,6 @@ void RecorderWidget::start ()
 
             optionsBox->setEnabled (false);
         }
-        else
-            mainWindow->setWindowTitle (tr("MRecorder - Home"));
     }
 }
 
@@ -387,7 +381,7 @@ void RecorderWidget::pause ()
 
 
     bStart->setText (tr("&Resume recording"));
-    mainWindow->setWindowTitle (tr("MRecorder - Paused"));
+    mainWindow->setWindowIcon (QIcon ("Paused.png"));
 
     bStart->setEnabled (true);
     bPause->setEnabled (false);
@@ -396,9 +390,10 @@ void RecorderWidget::pause ()
 
 void RecorderWidget::stop ()
 {
-    recorder->pause ();
+    bool wasPaused = recorder->paused ();
 
-    mainWindow->setWindowTitle (tr("MRecorder - Stop now ?"));
+    recorder->pause ();
+    mainWindow->setWindowIcon (QIcon ("Paused.png"));
 
 
     if (QMessageBox::question (this, tr("Confirmation"), tr("Do you really want to stop recording ?")) == QMessageBox::Yes)
@@ -409,8 +404,7 @@ void RecorderWidget::stop ()
 
 
         bStart->setText (tr("Start &recording"));
-        mainWindow->setWindowTitle (tr("MRecorder - Home"));
-        mainWindow->setTabIcon (mainWindow->currentIndex (), QIcon ());
+        mainWindow->setWindowIcon (QIcon ("Window Icon.png"));
 
         optionsBox->setEnabled (true);
 
@@ -421,18 +415,24 @@ void RecorderWidget::stop ()
     }
     else
     {
-        recorder->resume ();
+        if (wasPaused)
+            mainWindow->setWindowIcon (QIcon ("Paused.png"));
 
-        mainWindow->setWindowTitle (tr("MRecorder - Recording..."));
+        else
+        {
+            recorder->resume ();
+            mainWindow->setWindowIcon (QIcon ("Recording.png"));
+        }
     }
 }
 
 
 void RecorderWidget::abort ()
 {
-    recorder->pause ();
+    bool wasPaused = recorder->paused ();
 
-    mainWindow->setWindowTitle (tr("MRecorder - Stop without saving ?"));
+    recorder->pause ();
+    mainWindow->setWindowIcon (QIcon ("Paused.png"));
 
 
     if (QMessageBox::question (this, tr("Beware !"), tr("Do you really want to abort recording ?")) == QMessageBox::Yes)
@@ -444,8 +444,7 @@ void RecorderWidget::abort ()
 
 
         bStart->setText (tr("Start &recording"));
-        mainWindow->setWindowTitle (tr("MRecorder - Home"));
-        mainWindow->setTabIcon (mainWindow->currentIndex (), QIcon ());
+        mainWindow->setWindowIcon (QIcon ("Window Icon.png"));
 
         optionsBox->setEnabled (true);
 
@@ -456,9 +455,14 @@ void RecorderWidget::abort ()
     }
     else
     {
-        recorder->resume ();
+        if (wasPaused)
+            mainWindow->setWindowIcon (QIcon ("Paused.png"));
 
-        mainWindow->setWindowTitle (tr("MRecorder - Recording..."));
+        else
+        {
+            recorder->resume ();
+            mainWindow->setWindowIcon (QIcon ("Recording.png"));
+        }
     }
 }
 
@@ -469,8 +473,11 @@ bool RecorderWidget::beforeExit ()
 {
     if (recorder->recording ())
     {
+        bool wasPaused = recorder->paused ();
+
         recorder->pause ();
-        mainWindow->setWindowTitle (tr("MRecorder - Paused"));
+        mainWindow->setWindowIcon (QIcon ("Paused.png"));
+
 
         QMessageBox::StandardButton answer = QMessageBox::question (this, tr("Wait a second !"), tr("It seems you are still recording,\nDo you want to save before close ?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 
@@ -491,8 +498,14 @@ bool RecorderWidget::beforeExit ()
         }
         else
         {
-            mainWindow->setWindowTitle (tr("MRecorder - Recording..."));
-            recorder->resume ();
+            if (wasPaused)
+                mainWindow->setWindowIcon (QIcon ("Paused.png"));
+
+            else
+            {
+                recorder->resume ();
+                mainWindow->setWindowIcon (QIcon ("Recording.png"));
+            }
 
             return false;
         }

@@ -28,9 +28,7 @@ Application::Application () : QTabWidget ()
     qApp->installTranslator (messageBoxesTranslator);
 
 
-    setWindowTitle (tr("MRecorder - Home"));
     setWindowIcon (QIcon ("Window Icon.png"));
-
 
     optionsTab = new OptionsWidget;
     recordingsTab = new RecordingsManagerWidget (this);
@@ -43,6 +41,11 @@ Application::Application () : QTabWidget ()
     addTab (recordingsTab, tr("My recordings"));
     addTab (converterTab, tr("File converter"));
     addTab (optionsTab, tr("About and settings"));
+
+    setTabIcon (0, QIcon ("Recorder Image.png"));
+    setTabIcon (1, QIcon ("Start button.png"));
+    setTabIcon (2, QIcon ("Convert.png"));
+    setTabIcon (3, QIcon ("Settings.png"));
 
 
     show ();
