@@ -1,7 +1,5 @@
-# MRecorder
-MRecorder is a simple audio recorder made with Qt 5 and SFML 2.
-
-The source code is in "Sources" folder and all files to copy next to the main executable are in folder "Release files".
+# ASBEAR (Another Simple But Efficient Audio Recorder)
+ASBEAR is a simple audio recorder made with Qt 6 and SFML 2.
 
 The application will be soon renamed (surprise) because other software are named the same way...
 I'm rewriting it in order to port it to Linux where it will be available in the snap store and I'm trying
