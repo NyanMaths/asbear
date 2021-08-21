@@ -1,9 +1,9 @@
 name: asbear
 version: 3.0
-grade: stable
+grade: dev
 
 license: GPL-3.0
-icon: 'icon.png'
+icon: 'data/gui/icon.png'
 
 title: Another Simple But Efficient Audio Recorder (ASBEAR)
 summary: 'A simple, but efficient audio recorder with an embedded player and a converter'
@@ -24,8 +24,8 @@ description: |
 
 contact: ['nyanmaths@protonmail.com', 'https://memetech.weebly.com/contact']
 website: 'https://memetech.weebly.com'
-issues: ['https://github.com/NyanMaths/MRecorder/issues', 'https://memetech.weebly.com/MRecorder']
-source-code: ['https://github.com/NyanMaths/MRecorder']
+issues: ['https://github.com/NyanMaths/ASBEAR/issues', 'https://memetech.weebly.com/MRecorder']
+source-code: ['https://github.com/NyanMaths/ASBEAR']
 
 confinement: strict
 
@@ -36,12 +36,8 @@ apps:
 
 parts:
     asbear:
-        source: 'release'
-        build-packages:
-         - g++
-         - sfml
-         - qt6
-        stage-packages:
+        source: ''
+        stage-packages:  # Don't know what to build with...
          - sfml
          - qt6
 
