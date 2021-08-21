@@ -1,0 +1,14 @@
+Type=Application
+
+Name="ASBEAR"
+GenericName="Audio Recorder"
+Comment="Another Simple But Efficient Audio Recorder"
+
+Icon="icon.png"
+
+Exec="ASBEAR"
+
+
+# French translation
+
+GenericName[fr]="Enregistreur audio"
