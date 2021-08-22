@@ -1,5 +1,6 @@
 # ASBEAR (Another Simple But Efficient Audio Recorder)
-ASBEAR is a simple audio recorder made with Qt 6 and SFML 2.
+ASBEAR is a simple audio recorder made with Qt 6.1.2 and SFML 2.5.1,
+but not for too long, I will go back to Qt 5 soon for snap packaging...
 
 The application will be soon renamed (surprise) because other software are named the same way...
 I'm rewriting it in order to port it to Linux where it will be available in the snap store and I'm trying
