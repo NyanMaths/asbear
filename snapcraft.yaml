@@ -4,9 +4,9 @@ grade: dev
 base: core20
 
 license: GPL-3.0
-icon: 'data/gui/icon.png'
+# icon: 'snap/data/gui/icon.png'
 
-title: Another Simple But Efficient Audio Recorder (ASBEAR)
+title: 'Another Simple But Efficient Audio Recorder (ASBEAR)'
 summary: 'A simple, but efficient audio recorder with an embedded player and a converter'
 description: |
 '   This audio recorder currently supports three codecs :
