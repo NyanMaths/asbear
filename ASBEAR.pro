@@ -2,6 +2,8 @@ QT += core gui widgets
 
 CONFIG += c++17
 
+TARGET = ../snap/bin/asbear
+
 
 INCLUDEPATH += src
 

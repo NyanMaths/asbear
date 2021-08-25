@@ -4,9 +4,9 @@ Name="ASBEAR"
 GenericName="Audio Recorder"
 Comment="Another Simple But Efficient Audio Recorder"
 
-Icon="icon.png"
+Icon="data/gui/icon.png"
 
-Exec="ASBEAR"
+Exec="asbear"
 
 
 # French translation

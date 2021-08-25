@@ -1,6 +1,7 @@
 name: asbear
 version: 3.0
 grade: dev
+base: core20
 
 license: GPL-3.0
 icon: 'data/gui/icon.png'
@@ -36,10 +37,7 @@ apps:
 
 parts:
     asbear:
-        source: ''
-        stage-packages:  # Don't know what to build with...
-         - sfml
-         - qt6
+        source: 'snap'
 
 plugs:
     asbear-removable-media:
