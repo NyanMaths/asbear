@@ -1,23 +1,44 @@
 name: asbear
-version: 3.0
-grade: dev
+version: '3.0'
+grade: 'stable'
 base: core20
 
+license: GPL-3.0
+icon: 'release/data/gui/logo.png'
 
+summary: 'A simple, but efficient audio recorder with an embedded player and a converter'
+description: |
+    Another Simple But Efficient Audio Recorder (ASBEAR) is basically an audio recorder.
+    
+    It currently allows you to use three codecs : raw PCM (WAV), FLAC and Vorbis (OGG).
+    You can easily convert your recordings between these three codecs and manage them directly from the application : rename, move, remove...
+    
+    There is only two languages for the UI : English and French, and I do not plan on adding more.
+    And obviously, there is a dark theme !
+
+
+contact: ['nyanmaths@protonmail.com', 'https://memetech.weebly.com/contact']
+website: 'https://memetech.weebly.com'
 issues: ['https://github.com/NyanMaths/ASBEAR/issues', 'https://memetech.weebly.com/MRecorder']
-source-code: ['https://github.com/NyanMaths/ASBEAR']
+source-code: 'https://github.com/NyanMaths/ASBEAR'
 
 
 confinement: strict
 
 apps:
     asbear:
-        command: asbear
-        desktop: 'ASBEAR.desktop'
+        command: bin/asbear
+        desktop: 'asbear.desktop'
 
 parts:
     asbear:
-        source: 'snap'
+        plugin: dump
+        source: 'release'
+        stage-snaps:
+         - kde-frameworks-5-qt-5-15-core20
+        stage-packages:
+         - libsfml-dev
+
 
 plugs:
     asbear-removable-media:

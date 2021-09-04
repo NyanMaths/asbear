@@ -4,47 +4,48 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../src/Application.cpp" line="35"/>
+        <location filename="../src/Application.cpp" line="36"/>
         <source>Audio recorder</source>
         <translation>Enregistreur audio</translation>
     </message>
     <message>
-        <location filename="../src/Application.cpp" line="36"/>
+        <location filename="../src/Application.cpp" line="37"/>
         <source>My recordings</source>
         <oldsource>Your recordings</oldsource>
         <translation>Mes enregistrements</translation>
     </message>
     <message>
-        <location filename="../src/Application.cpp" line="37"/>
+        <location filename="../src/Application.cpp" line="38"/>
         <source>File converter</source>
         <oldsource>Files converter</oldsource>
         <translation>Convertisseur de fichiers</translation>
     </message>
     <message>
-        <location filename="../src/Application.cpp" line="38"/>
+        <location filename="../src/Application.cpp" line="39"/>
         <source>About and settings</source>
         <translation>A propos et paramètres</translation>
     </message>
     <message>
-        <location filename="../src/Application.cpp" line="73"/>
+        <location filename="../src/Application.cpp" line="74"/>
         <source>Not my bad !</source>
-        <translation type="unfinished"></translation>
+        <translation>C&apos;est pas ma faute !</translation>
     </message>
     <message>
-        <location filename="../src/Application.cpp" line="73"/>
+        <location filename="../src/Application.cpp" line="74"/>
         <source>My installation seems to be broken, you may not give me the file access permission.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mon installation semble un peu foireuse ou il doit me manquer quelques permissions.</translation>
     </message>
     <message>
-        <location filename="../src/Application.cpp" line="107"/>
+        <location filename="../src/Application.cpp" line="108"/>
         <source>Hep hep hep !</source>
-        <translation type="unfinished"></translation>
+        <translation>Hep hep hep !</translation>
     </message>
     <message>
-        <location filename="../src/Application.cpp" line="107"/>
+        <location filename="../src/Application.cpp" line="108"/>
         <source>You are still converting some files, if you abort the operation, you could damage them and even your installation.
 Do you really want to forcefully quit ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous convertissez encore des fichiers, annuler l&apos;opération endommagera le fichier en cours et peut-être même votre installation.
+Voulez-vous vraiment quitter de force ?</translation>
     </message>
 </context>
 <context>
@@ -164,12 +165,18 @@ Pro tips :
 - Convert to OGG will reduce the file size (But with quality loss)
 - You should convert your WAV files to FLAC in order to lighten them without quality loss
 - It&apos;s generally not a good idea to convert files to WAV, they will be uselessly heavied</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous pouvez facilement convertir vos fichiers audio grâce à cet outil.
+Séléctionnez les fichiers à modifier ou faites un glisser-déposer sur la fenêtre !
+
+Astuces :
+- Convertir en OGG allègera le fichier avec une très légère perte de qualité
+- Vous devriez convertir de WAV à FLAC pour alléger les fichiers sans les détériorer
+- Ce n&apos;est pas une bonne idée de convertir des fichiers en WAV, cela les alourdira inutilement</translation>
     </message>
     <message>
         <location filename="../src/tabs/ConverterWidget.cpp" line="120"/>
         <source>Lowest</source>
-        <translation type="unfinished"></translation>
+        <translation>Plus basse possible</translation>
     </message>
     <message>
         <location filename="../src/tabs/ConverterWidget.cpp" line="124"/>
@@ -179,7 +186,7 @@ Pro tips :
     <message>
         <location filename="../src/tabs/ConverterWidget.cpp" line="125"/>
         <source>Time critical</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;Temps critique&quot; : aussi souvent que possible</translation>
     </message>
     <message>
         <location filename="../src/tabs/ConverterWidget.cpp" line="127"/>
@@ -247,7 +254,7 @@ Voulez-vous les ajouter à vos enregistrements ?</translation>
     <message>
         <location filename="../src/tabs/ConverterWidget.cpp" line="341"/>
         <source>Conversion is finished !</source>
-        <translation type="unfinished"></translation>
+        <translation>Conversion terminée !</translation>
     </message>
     <message>
         <location filename="../src/tabs/ConverterWidget.cpp" line="362"/>
@@ -265,7 +272,7 @@ Voulez-vous les ajouter à vos enregistrements ?</translation>
     <message>
         <location filename="../src/tabs/OptionsWidget.cpp" line="17"/>
         <source>This opensource software was developed by NY4N_M4THS&lt;br/&gt;under &lt;a href = &apos;https://gnu.org/licenses/gpl-3.0.en.html&apos;&gt;GPL 3.0&lt;/a&gt; with the framework &lt;a href = &apos;https://qt.io&apos;&gt;Qt&lt;/a&gt; and &lt;a href = &apos;https://sfml-dev.org&apos;&gt;SFML&lt;/a&gt; in C++ language.&lt;br/&gt;You can also visit &lt;a href = &apos;https://memetech-inc.weebly.com&apos;&gt;our website&lt;/a&gt; to check for updates,&lt;br/&gt;try other of our applications or &lt;a href = &apos;https://github.com/NyanMaths/MRecorder/issues&apos;&gt;ask for new features&lt;/a&gt; !&lt;br/&gt;Click &lt;a href = &apos;https://github.com/NyanMaths/MRecorder&apos;&gt;here&lt;/a&gt; to visit the GitHub page of the project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce logiciel opensource a été réalisé par NY4N_M4THS&lt;br/&gt;sous license &lt;a href = &apos;https://gnu.org/licenses/gpl-3.0.fr.html&apos;&gt;LGPL 3.0&lt;/a&gt; avec le framework &lt;a href = &apos;https://qt.io&apos;&gt;Qt 5&lt;/a&gt; et &lt;a href = &apos;https://sfml-dev.org&apos;&gt;SFML&lt;/a&gt; en langage C++.&lt;br/&gt;Vous pouvez faire un tour sur &lt;a href = &apos;https://memetech-inc-fr.weebly.com&apos;&gt;mon site web&lt;/a&gt; pour mettre à jour ASBEAR,&lt;br/&gt;essayer d&apos;autres applications ou &lt;a href = &apos;https://github.com/NyanMaths/ASBEAR/issues&apos;&gt;demander de nouvelles fonctionalités&lt;/a&gt; !&lt;br/&gt;Cliquez &lt;a href = &apos;https://github.com/NyanMaths/ASBEAR&apos;&gt;ici&lt;/a&gt; pour visiter la page GitHub du projet.</translation>
     </message>
     <message>
         <location filename="../src/tabs/OptionsWidget.cpp" line="44"/>
@@ -281,24 +288,25 @@ Voulez-vous les ajouter à vos enregistrements ?</translation>
         <location filename="../src/tabs/OptionsWidget.cpp" line="55"/>
         <location filename="../src/tabs/OptionsWidget.cpp" line="106"/>
         <source>Join the dark side, Luke</source>
-        <translation type="unfinished"></translation>
+        <translation>Rejoins le côté obscur, Luke</translation>
     </message>
     <message>
         <location filename="../src/tabs/OptionsWidget.cpp" line="73"/>
         <location filename="../src/tabs/OptionsWidget.cpp" line="104"/>
         <source>To light theme, if you have no taste</source>
-        <translation type="unfinished"></translation>
+        <translation>Le thème clair, si vous n&apos;avez aucun goût</translation>
     </message>
     <message>
         <location filename="../src/tabs/OptionsWidget.cpp" line="96"/>
         <source>Required restart</source>
-        <translation type="unfinished"></translation>
+        <translation>Redémarrage nécessaire</translation>
     </message>
     <message>
         <location filename="../src/tabs/OptionsWidget.cpp" line="96"/>
         <source>You need to reload the application to apply changes.
 Do you want to do it now ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Il vous faut recharger l&apos;application pour appliquer ces changements.
+Voulez-vous le faire de suite ?</translation>
     </message>
     <message>
         <source>Switch to light theme (I disavow you when necessary)</source>
@@ -407,52 +415,52 @@ Voulez-vous le faire tout de suite ?</translation>
     <message>
         <location filename="../src/tabs/RecorderWidget.cpp" line="138"/>
         <source>Vorbis (OGG) : small size, good quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorbis (OGG) : petite fichier, bonne qualité</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecorderWidget.cpp" line="139"/>
         <source>FLAC : medium size, best quality</source>
-        <translation type="unfinished"></translation>
+        <translation>FLAC : fichier moyen, meilleure qualité</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecorderWidget.cpp" line="140"/>
         <source>Raw PCM (WAV) : huge size, best quality</source>
-        <translation type="unfinished"></translation>
+        <translation>PCM brut (WAV) : énorme fichier, meilleure qualité</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecorderWidget.cpp" line="152"/>
         <source>8 kHz (if you know what you do)</source>
-        <translation type="unfinished"></translation>
+        <translation>8 kHz (Si vous savez ce que vous faites)</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecorderWidget.cpp" line="153"/>
         <source>11 kHz (same)</source>
-        <translation type="unfinished"></translation>
+        <translation>11 kHz (même recommandation)</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecorderWidget.cpp" line="154"/>
         <source>22 kHz (same)</source>
-        <translation type="unfinished"></translation>
+        <translation>22 kHz (toujours)</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecorderWidget.cpp" line="155"/>
         <source>44.1 kHz (CD quality, standard)</source>
-        <translation type="unfinished"></translation>
+        <translation>44,1 kHz (Qualité CD, standard)</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecorderWidget.cpp" line="156"/>
         <source>48 kHz (DVD quality)</source>
-        <translation type="unfinished"></translation>
+        <translation>48 kHz (Qualité DVD)</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecorderWidget.cpp" line="157"/>
         <source>96 kHz (Studio quality)</source>
-        <translation type="unfinished"></translation>
+        <translation>96 kHz (Qualité studio)</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecorderWidget.cpp" line="158"/>
         <source>192 kHz (Turbo studio quality)</source>
-        <translation type="unfinished"></translation>
+        <translation>192 kHz (Turbo qualité studio)</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecorderWidget.cpp" line="177"/>
@@ -597,12 +605,12 @@ Souhaitez-vous le remplacer ?</translation>
     <message>
         <location filename="../src/tabs/RecorderWidget.cpp" line="331"/>
         <source>Not my bad...</source>
-        <translation type="unfinished"></translation>
+        <translation>J&apos;ai rien fait...</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecorderWidget.cpp" line="331"/>
         <source>Impossible to remove this annoying file, you will have to try another name !</source>
-        <translation type="unfinished"></translation>
+        <translation>Je n&apos;arrive pas à supprimer cet embêtant fichier, vous allez devoir donner un autre nom à votre enregistrement !</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecorderWidget.cpp" line="389"/>
@@ -655,7 +663,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
         <translation type="vanished">&amp;Supprimer</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="395"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="335"/>
         <source>Ooooops...</source>
         <translation>Oups...</translation>
     </message>
@@ -690,61 +698,62 @@ et même en ajouter manuellement par glisser-déposer ou en utilisant le bouton 
     <message>
         <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="89"/>
         <source>Add recordings</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter des enregistrements</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="90"/>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriétés</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="91"/>
         <source>Open folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir le dossier</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="92"/>
         <source>Move to...</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacer</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="93"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>Renommer</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="94"/>
         <source>Convert</source>
-        <translation type="unfinished"></translation>
+        <translation>Convertir</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="95"/>
         <source>Remove from list</source>
-        <translation type="unfinished"></translation>
+        <translation>Retirer de a liste</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="96"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="97"/>
         <source>Clear list</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer la liste</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="98"/>
         <source>Delete all</source>
-        <translation type="unfinished"></translation>
+        <translation>Tout supprimer</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="198"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="178"/>
         <source>It seems that I can not access to this file,
 do you want to try to delete it ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Je ne peux pas accéder à ce fichier,
+voulez-vous tenter de le supprimer ?</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="395"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="335"/>
         <source>Impossible to load this file,
 it must be corrupted !
 Do you want to delete it ?</source>
@@ -753,24 +762,24 @@ le fichier est sûrement corrompu !
 Voulez-vous le supprimer ?</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="402"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="342"/>
         <source>Name : </source>
         <translation>Nom : </translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="403"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="343"/>
         <source>
 Recorded on : </source>
         <translation>
 Enregistré le : </translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="403"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="343"/>
         <source>MM/dd/yyyy</source>
         <translation>dd/MM/yyyy</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="404"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="344"/>
         <source>
 
 Sample rate : </source>
@@ -779,21 +788,21 @@ Sample rate : </source>
 Fréquence d&apos;échantillonage : </translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="405"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="345"/>
         <source>
 Channels : </source>
         <translation>
 Canaux : </translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="406"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="346"/>
         <source>
 Size : </source>
         <translation>
 Taille : </translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="410"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="350"/>
         <source> MB
 Duration : </source>
         <oldsource> MegaBytes
@@ -802,7 +811,7 @@ Duration : </oldsource>
 Durée : </translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="413"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="353"/>
         <source> KB
 Duration : </source>
         <oldsource> KiloBytes
@@ -811,15 +820,15 @@ Duration : </oldsource>
 Durée : </translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="420"/>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="424"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="360"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="364"/>
         <source>1 second</source>
         <oldsource> seconds</oldsource>
         <translation>1 seconde</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="420"/>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="424"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="360"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="364"/>
         <source>%n seconds</source>
         <translation>
             <numerusform>%n seconde</numerusform>
@@ -827,13 +836,13 @@ Durée : </translation>
         </translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="423"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="363"/>
         <source>1 minute and </source>
         <oldsource> minutes and </oldsource>
         <translation>1 minutes et </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="423"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="363"/>
         <source>%n minutes and </source>
         <translation>
             <numerusform>%n minute et </numerusform>
@@ -841,12 +850,12 @@ Durée : </translation>
         </translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="427"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="367"/>
         <source>1 minute</source>
         <translation>1 minute</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="427"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="367"/>
         <source>%n minutes</source>
         <translation>
             <numerusform>%n minute</numerusform>
@@ -854,80 +863,84 @@ Durée : </translation>
         </translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="430"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="370"/>
         <source>File properties</source>
         <translation>Propriétés du fichier</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="449"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="389"/>
         <source>Select destination folder</source>
         <translation>Séléctionnez un fichier de destination</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="459"/>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="574"/>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="599"/>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="613"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="399"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="514"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="539"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="553"/>
         <source>Confirmation</source>
         <translation>Confirmation</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="459"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="399"/>
         <source>A file with the same name already exists there,
 do you want to replace it ?</source>
         <translation>Un fichier du même nom existe déjà ici,
 voulez-vous le remplacer ?</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="469"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="409"/>
         <source>Impossible to move the file for some reason,
 you should know more than me about that, so good luck !</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de déplacer ce fichier pour une raison qui m&apos;échappe,
+vous devez en savoir plus que moi, bonne chance !</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="492"/>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="539"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="432"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="479"/>
         <source>Operation successful !</source>
         <translation>Opération réussie !</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="492"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="432"/>
         <source>File moved to
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier déplacé vers </translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="504"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="444"/>
         <source>Please input the new file name :</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez entrer le nouveau nom du fichier :</translation>
+    </message>
+    <message>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="479"/>
+        <source>Your recording was renamed </source>
+        <translation>Votre enregistrement a été renommé </translation>
+    </message>
+    <message>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="482"/>
+        <source>Impossible to rename the file for some reason,
+you should know more than me about that, so good luck !</source>
+        <translation>Impossible de renommer ce fichier pour une raison qui m&apos;échappe,
+vous devez en savoir plus que moi, bonne chance !</translation>
+    </message>
+    <message>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="514"/>
+        <source>Do you really want to permanently delete this file ?</source>
+        <translation>Voulez-vous vraiment supprimer ce fichier pour toujours (C&apos;est vraiment long) ?</translation>
+    </message>
+    <message>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="526"/>
+        <source>Impossible to delete the file for some reason,
+you should know more than me about that, no my bad please do not beat me !</source>
+        <translation>Impossible de supprimer ce fichier pour une raison qui m&apos;échappe,
+vous devez en savoir plus que moi, c&apos;est pas ma faute alors ne me frappez pas s&apos;il vous plaît !</translation>
     </message>
     <message>
         <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="539"/>
-        <source>Your recording was renamed </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="542"/>
-        <source>Impossible to rename the file for some reason,
-you should know more than me about that, so good luck !</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="574"/>
-        <source>Do you really want to permanently delete this file ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="586"/>
-        <source>Impossible to delete the file for some reason,
-you should know more than me about that, no my bad please do not beat me !</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="599"/>
         <source>Do you really want to clear the list ?
 This won&apos;t remove your recordings from your PC.</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous vraiment effacer votre liste ?
+Notez que cela ne les supprimera pas réellement.</translation>
     </message>
     <message>
         <source>File </source>
@@ -940,7 +953,7 @@ moved to </source>
 à été déplacé vers </translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="504"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="444"/>
         <source>Rename file</source>
         <translation>Renommer le fichier</translation>
     </message>
@@ -961,12 +974,12 @@ moved to </source>
 </translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="363"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="303"/>
         <source>Select files to add to your recordings</source>
         <translation>Séléctionnez les fichiers à ajouter dans vos enregistrements</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="363"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="303"/>
         <source>Audio files (*.ogg *.flac *.wav)</source>
         <translation>Fichiers audio (*.ogg *.flac *.wav)</translation>
     </message>
@@ -982,23 +995,23 @@ This won&apos;t remove your recordings.</source>
 </translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="660"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="600"/>
         <source>Impossible to import </source>
         <translation>Impossible d&apos;importer </translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="660"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="600"/>
         <source>,
 you can only import OGG, FLAC and WAV files !</source>
         <translation>,
 vous pouvez seulement importer des fichiers OGG, FLAC et WAV !</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="469"/>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="542"/>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="586"/>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="620"/>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="660"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="409"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="482"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="526"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="560"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="600"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
@@ -1025,7 +1038,7 @@ vous pouvez seulement importer des fichiers OGG, FLAC et WAV !</translation>
         <translation type="vanished">Avancer (1/100)</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="198"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="178"/>
         <source>Missing file</source>
         <translation>Fichier manquant</translation>
     </message>
@@ -1047,7 +1060,7 @@ you must already did it.</source>
 vous l&apos;avez probablement déjà fait.</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="620"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="560"/>
         <source>Impossible to delete </source>
         <translation>Impossible de supprimer </translation>
     </message>
@@ -1058,7 +1071,7 @@ You must already did it.</source>
 Vous l&apos;avez probablement déjà fait.</translation>
     </message>
     <message>
-        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="613"/>
+        <location filename="../src/tabs/RecordingsManagerWidget.cpp" line="553"/>
         <source>Do you really want to remove all your recordings ?
 This action cannot be undone.</source>
         <translation>Voulez-vous vraiment supprimer tous vos enregistrements ? Cette action ne pourra pas être annulée.</translation>

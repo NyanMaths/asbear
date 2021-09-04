@@ -2,7 +2,7 @@ QT += core gui widgets
 
 CONFIG += c++17
 
-TARGET = ../snap/bin/asbear
+TARGET = ../release/bin/asbear
 
 
 INCLUDEPATH += src
@@ -26,6 +26,7 @@ HEADERS += \
     src/widgets/AudioLevelWidget.hpp \
     src/widgets/DevicesComboBox.hpp \
     src/widgets/DirectJumpSlider.hpp \
+    src/widgets/PlaybackBar.hpp \
     src/widgets/SpectrumWidget.hpp
 
 SOURCES += \
@@ -41,4 +42,5 @@ SOURCES += \
     src/widgets/AudioLevelWidget.cpp \
     src/widgets/DevicesComboBox.cpp \
     src/widgets/DirectJumpSlider.cpp \
+    src/widgets/PlaybackBar.cpp \
     src/widgets/SpectrumWidget.cpp
