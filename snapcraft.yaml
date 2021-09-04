@@ -24,6 +24,7 @@ source-code: 'https://github.com/NyanMaths/ASBEAR'
 
 
 confinement: strict
+architectures: arm64
 
 apps:
     asbear:
