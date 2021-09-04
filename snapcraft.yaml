@@ -32,11 +32,8 @@ apps:
 
 parts:
     asbear:
-        plugin: dump
-        source: 'release'
-        stage-snaps:
-         - kde-frameworks-5-qt-5-15-core20
-        stage-packages:
+        plugin: qmake
+        build-packages:
          - libsfml-dev
 
 
