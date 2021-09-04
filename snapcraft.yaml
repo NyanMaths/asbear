@@ -33,6 +33,8 @@ apps:
 parts:
     asbear:
         plugin: qmake
+        qt-version: qt5
+        source: https://github.com/NyanMaths/ASBEAR
         build-packages:
          - libsfml-dev
 
