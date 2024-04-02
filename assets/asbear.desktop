@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+
+Name=ASBEAR
+GenericName=Audio Recorder
+Comment=Another Simple But Efficient Audio Recorder
+
+Icon=assets/gui/logo.png
+
+Exec=asbear
+
+# French translation
+GenericName[fr]=Enregistreur audio
