@@ -6,10 +6,10 @@
 
 #include <QWidget>
 #include <QLabel>
-#include "widgets/DirectJumpSlider.hpp"
+#include "custom_widgets/direct_jump_slider.hpp"
 
 #include <SFML/Audio.hpp>
-#include "tools/RecordingPlayer.hpp"
+#include "tools/player.hpp"
 
 
 class PlaybackBar : public QWidget

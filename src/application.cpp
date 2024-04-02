@@ -4,7 +4,7 @@
 #include <QTextStream>
 #include <QDir>
 
-#include "Application.hpp"
+#include "application.hpp"
 
 
 Application::Application () : QTabWidget ()
@@ -15,7 +15,7 @@ Application::Application () : QTabWidget ()
 
 
     translator = new QTranslator;
-    Q_UNUSED(translator->load("data/lang/asbear-" + config["locale"]));
+    Q_UNUSED(translator->load("assets/lang/asbear-" + config["locale"]));
     qApp->installTranslator(translator);
 
     messageBoxesTranslator = new QTranslator;

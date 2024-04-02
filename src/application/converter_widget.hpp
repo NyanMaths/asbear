@@ -8,12 +8,12 @@
 #include <QLabel>
 #include <QProgressBar>
 #include <QSpinBox>
-#include "tabs/RecordingsManagerWidget.hpp"
+#include "application/recording_manager_widget.hpp"
 
 #include <QGroupBox>
 #include <QVBoxLayout>
 
-#include "tools/Converter.hpp"
+#include "tools/converter.hpp"
 
 
 class ConverterWidget : public QWidget

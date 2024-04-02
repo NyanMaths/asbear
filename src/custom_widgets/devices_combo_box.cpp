@@ -1,4 +1,4 @@
-#include "widgets/DevicesComboBox.hpp"
+#include "custom_widgets/devices_combo_box.hpp"
 
 #include <SFML/Audio.hpp>
 

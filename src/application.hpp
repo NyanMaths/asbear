@@ -5,10 +5,10 @@
 #include <QApplication>
 
 #include <QTabWidget>
-#include "tabs/RecorderWidget.hpp"
-#include "tabs/RecordingsManagerWidget.hpp"
-#include "tabs/ConverterWidget.hpp"
-#include "tabs/OptionsWidget.hpp"
+#include "application/recorder_widget.hpp"
+#include "application/recording_manager_widget.hpp"
+#include "application/converter_widget.hpp"
+#include "application/settings_widget.hpp"
 
 
 class Application : public QTabWidget

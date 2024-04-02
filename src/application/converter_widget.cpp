@@ -7,7 +7,7 @@
 #include <QInputDialog>
 #include <QFileDialog>
 
-#include "tabs/ConverterWidget.hpp"
+#include "application/converter_widget.hpp"
 
 
 ////////////// Initialize widget

@@ -8,16 +8,16 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QCheckBox>
-#include "widgets/DevicesComboBox.hpp"
-#include "widgets/AudioLevelWidget.hpp"
-#include "widgets/SpectrumWidget.hpp"
-#include "widgets/DirectJumpSlider.hpp"
-#include "tabs/RecordingsManagerWidget.hpp"
+#include "custom_widgets/devices_combo_box.hpp"
+#include "custom_widgets/audio_level_bar.hpp"
+#include "custom_widgets/level_timeline.hpp"
+#include "custom_widgets/direct_jump_slider.hpp"
+#include "application/recording_manager_widget.hpp"
 
 #include <QGroupBox>
 #include <QGridLayout>
 
-#include "tools/AudioRecorder.hpp"
+#include "tools/audio_recorder.hpp"
 
 
 class RecorderWidget : public QWidget

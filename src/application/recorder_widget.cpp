@@ -7,7 +7,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 
-#include "tabs/RecorderWidget.hpp"
+#include "application/recorder_widget.hpp"
 
 
 ////////////// Initialize widget

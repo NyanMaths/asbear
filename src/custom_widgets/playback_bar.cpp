@@ -1,4 +1,4 @@
-#include "widgets/PlaybackBar.hpp"
+#include "custom_widgets/playback_bar.hpp"
 
 
 PlaybackBar::PlaybackBar (RecordingPlayer* recording) : QWidget()

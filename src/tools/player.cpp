@@ -1,4 +1,4 @@
-#include "tools/RecordingPlayer.hpp"
+#include "tools/player.hpp"
 
 
 RecordingPlayer::RecordingPlayer (QObject* parent) : QObject (parent)

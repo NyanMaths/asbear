@@ -2,7 +2,7 @@
 #include <QStyleOptionSlider>
 #include <QMouseEvent>
 
-#include "widgets/DirectJumpSlider.hpp"
+#include "custom_widgets/direct_jump_slider.hpp"
 
 
 DirectJumpSlider::DirectJumpSlider () : QSlider ()

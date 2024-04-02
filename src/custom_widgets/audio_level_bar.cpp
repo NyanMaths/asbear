@@ -2,7 +2,7 @@
 
 #include <QPainter>
 
-#include "widgets/AudioLevelWidget.hpp"
+#include "custom_widgets/audio_level_bar.hpp"
 
 
 AudioLevelWidget::AudioLevelWidget () : QWidget ()

@@ -3,7 +3,7 @@
 
 #include <QFile>
 
-#include "tabs/OptionsWidget.hpp"
+#include "application/settings_widget.hpp"
 
 
 ////////////// Initialize widget

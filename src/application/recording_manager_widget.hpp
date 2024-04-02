@@ -6,11 +6,11 @@
 #include <QListWidget>
 
 #include <QLabel>
-#include "widgets/PlaybackBar.hpp"
+#include "custom_widgets/playback_bar.hpp"
 #include <QGridLayout>
 
 #include <SFML/Audio.hpp>
-#include "tools/RecordingPlayer.hpp"
+#include "tools/player.hpp"
 #include <QTimer>
 
 

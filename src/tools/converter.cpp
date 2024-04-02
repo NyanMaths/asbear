@@ -1,4 +1,4 @@
-#include "tools/Converter.hpp"
+#include "tools/converter.hpp"
 
 
 Converter::Converter () : QThread() { }

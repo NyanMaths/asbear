@@ -2,7 +2,7 @@
 
 #include <QPainter>
 
-#include "widgets/SpectrumWidget.hpp"
+#include "custom_widgets/level_timeline.hpp"
 
 
 SpectrumWidget::SpectrumWidget () : QWidget ()

@@ -10,8 +10,8 @@
 
 #include <QDropEvent>
 
-#include "tabs/ConverterWidget.hpp"
-#include "tabs/RecordingsManagerWidget.hpp"
+#include "application/converter_widget.hpp"
+#include "application/recording_manager_widget.hpp"
 
 #include <QMessageBox>
 #include <QInputDialog>
