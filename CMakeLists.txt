@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(QT_VERSION_MAJOR 6)
 
 set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../build/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/release/bin)
 
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(SFML REQUIRED COMPONENTS system audio)
@@ -22,10 +22,10 @@ find_package(SFML REQUIRED COMPONENTS system audio)
 
 include_directories(include)
 
-set(TS_FILES translations/asbear-fr.ts)
+set(TS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/translations/asbear-fr.ts)
 
 set_source_files_properties(${TS_FILES}
-	PROPERTIES OUTPUT_LOCATION "../../assets/lang")
+	PROPERTIES OUTPUT_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/assets/lang")
 
 set(PROJECT_SOURCES
 	src/main.cpp
@@ -89,5 +89,5 @@ qt_add_lupdate(asbear TS_FILES ${TS_FILES})
 qt_add_lrelease(TS_FILES ${TS_FILES})
 
 # install assets to release folder
-ADD_CUSTOM_TARGET(link_target ALL COMMAND ${CMAKE_COMMAND} -E create_symlink "../../assets" "../../build/release/data")
+ADD_CUSTOM_TARGET(link_target ALL COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_CURRENT_SOURCE_DIR}/build/release/data")
 

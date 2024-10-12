@@ -13,8 +13,8 @@ I can't test for xorg as I am on wayland but it should be fiiiiine...
 
 As I do not support anything else than Linux for now, Windows users are on their own.
 On Linux, you have to build it yourself. You will need Qt 6 and SFML 2 to do so.
-Clone the repo, cd inside and `cmake . && make build`.
-To launch, `cd build/release && bin/asbear`.
+Clone the repo, cd inside and `cmake -B build && cd build && make`.
+To launch, `cd release && bin/asbear`.
 
 ## Roadmap
 
