@@ -44,8 +44,8 @@ Application::Application () : QTabWidget ()
     setTabIcon(3, QIcon("data/gui/settings.png"));
 
 
-    setFixedSize(size());
-    showMaximized();
+	//setFixedSize(size());
+	show();
 }
 
 Application::~Application ()
