@@ -20,7 +20,7 @@ void DirectJumpSlider::mousePressEvent (QMouseEvent* event)
 
     if (event->button() == Qt::LeftButton && !sr.contains(event->pos()))
     {
-        setValue(style()->sliderValueFromPosition(minimum(), maximum(), event->x(), width()));
+		setValue(style()->sliderValueFromPosition(minimum(), maximum(), event->position().x(), width()));
         event->accept();
     }
 
