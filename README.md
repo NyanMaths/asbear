@@ -18,7 +18,7 @@ To launch, `cd release && bin/asbear`.
 
 ## Roadmap
 
-* Using an acutaul configuration format like YAML
+* Using an actual configuration format like YAML
 * Automating installation
 * Supporting more codecs
 
