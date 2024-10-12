@@ -6,8 +6,8 @@ I can't test for xorg as I am on wayland but it should be fiiiiine...
 
 ## Showcase
 
-[!image](.captures/recorder.webp)
-[!image](.captures/other.webp)
+[!image](https://github.com/NyanMaths/asbear/raw/refs/heads/master/.captures/recorder.webp)
+[!image](https://github.com/NyanMaths/asbear/raw/refs/heads/master/.captures/other.webp)
 
 ## Installation
 
